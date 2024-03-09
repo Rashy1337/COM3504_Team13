@@ -2,10 +2,24 @@
 <html>
   <head>
     <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/public/stylesheets/style.css' />
   </head>
   <body>
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
+  <form action="/add" method="POST">
+    <LABEL for="firstName">First Name:</LABEL>
+    <input type="text" id="firstName" name="first_name" required><br>
+    <br>
+    <LABEL for="lastName">Last Name:</LABEL>
+    <input type="text" id="lastName" name="last_name" required><br>
+    <br>
+    <LABEL for="dateOfBirth">Date of Birth:</LABEL>
+    <input type="date" id="dateOfBirth" name="dob" required><br><br>
+    
+    <button type="submit">Add Student</button>
+  </form>
+  <hr>
+  <a href="/display"><p>View All Students</p></a>
   </body>
 </html>
