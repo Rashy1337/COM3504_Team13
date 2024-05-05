@@ -38,4 +38,16 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+<<<<<<< Updated upstream
 module.exports = app;
+=======
+// Server listening
+var port = process.env.PORT || '3000';
+app.set('port', port);
+
+var server = app.listen(port, function() {
+  console.log('Server listening on port ' + server.address().port);
+});
+
+module.exports = app;
+
