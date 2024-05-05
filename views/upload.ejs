@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+    <%- include('partials/_header') %>
+<h1>Fill Plant Details</h1>
+
+<div class="heading">
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <label for="plantName">Plant Name:</label><br>
+        <input type="text" id="plantName" name="plantName"><br><br>
+
+        <label for="dateTime">Date and Time:</label><br>
+        <input type="datetime-local" id="dateTime" name="dateTime"><br><br>
+
+        <label for="plantSize">Plant Size:</label><br>
+        <input type="text" id="plantSize" name="plantSize"><br><br>
+
+        <label>Plant Characteristics:</label><br>
+        <div class="characteristics">
+            <label class="bullet-circle"><input type="radio" name="plantCharacteristics" value="flower"> Flower</label><br>
+            <label class="bullet-circle"><input type="radio" name="plantCharacteristics" value="leaf"> Leaf</label><br>
+            <label class="bullet-circle"><input type="radio" name="plantCharacteristics" value="fruit"> Fruit or Seed</label><br>
+        </div><br><br>
+
+        <label for="plantPhoto">Plant Photo:</label><br>
+        <input type="file" id="plantPhoto" name="plantPhoto"><br><br>
+
+        <label for="url">Enter URL:</label><br>
+        <input type="url" id="url" name="url"><br><br>
+
+        <label for="address">Address:</label><br>
+        <input type="text" id="address" name="address"><br><br>
+
+        <input type="submit" value="Upload">
+        </form>
+        <a href="/">Go back to the root page</a>
+    </form>
+</div>
+</body>
+</html>

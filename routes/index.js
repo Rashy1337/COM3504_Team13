@@ -9,4 +9,9 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Plant Findr!', plants: plantsData });
 });
 
+/* GET upload page. */
+router.get('/upload', function(req, res, next) {
+  res.render('upload', { title: 'Upload Page' });
+});
+
 module.exports = router;

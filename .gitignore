@@ -7,9 +7,6 @@ yarn-error.log
 # Express.js
 .env
 
-# EJS
-/views/*.ejs
-
 # Logs
 logs/
 *.log
