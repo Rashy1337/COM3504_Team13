@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <div class="header">
-      <p>Plant<br>Findr</p>
-      <div class="nav">
-        <a href="/">Home</a>
-        <a href="/Upload">Upload</a>
-      </div>
-    </div>
+<head>
+  <title><%= title %></title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+  <%- include('partials/_header') %>
 
+  <h1><%= title %></h1>
+  <p>Welcome to <%= title %></p>
 
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-
-    <div class="heading">
+  <div class="heading">
     <p>Plantfindr is your digital companion for exploring the botanical world. Our progressive web application enables you to record, view, and discuss various plant species with ease. Whether you’re a budding botanist or just curious about the greenery around you, Plantfindr is your gateway to learning more about plants. </p>
-    
-  </div> 
-  </body>
+  </div>
+
+  <div class="plant-container">
+    <% plants.forEach(function(plant) { %>
+      <a href="/plant/<%= encodeURIComponent(plant.name) %>" class="plant-box">
+        <h2><%= plant.name %></h2>
+        <p><%= plant.description %></p>
+        <!-- Add more plant details here as needed -->
+      </a>
+    <% }); %>
+  </div>
+</body>
 </html>

@@ -59,3 +59,29 @@ a {
   border-bottom: 0.2em solid #000; /* Change #000 to any color you want */
   border-radius: 1em;
 }
+
+.plant-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.plant-box {
+  border: 0.2em solid yellow; 
+  border-radius: 1em;
+  margin: 0.5em; 
+  padding: 2em; 
+  width: 30%;
+  background-color: #ffffffbb;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1)
+}
+
+.plant-box h2 {
+  font-size: 3em; 
+  color: #1b1b1b; 
+  margin-bottom: 0.5em; 
+}
+
+.plant-box p { /* Assuming p is your description */
+  color: #666; /* Different color for the description */
+}

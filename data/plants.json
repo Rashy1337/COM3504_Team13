@@ -1,0 +1,82 @@
+[
+    {
+        "name": "Birch",
+        "description": "A deciduous hardwood tree."
+    },
+    {
+        "name": "Azalea",
+        "description": "A flowering shrub in the genus Rhododendron."
+    },
+    {
+        "name": "Cedar",
+        "description": "A coniferous tree in the cypress family."
+    },
+    {
+        "name": "Dogwood",
+        "description": "A flowering tree in the genus Cornus."
+    },
+    {
+        "name": "Elm",
+        "description": "A deciduous tree in the genus Ulmus."
+    },
+    {
+        "name": "Fir",
+        "description": "A coniferous tree in the pine family."
+    },
+    {
+        "name": "Ginkgo",
+        "description": "A deciduous tree in the family Ginkgoaceae."
+    },
+    {
+        "name": "Hemlock",
+        "description": "A coniferous tree in the pine family."
+    },
+    {
+        "name": "Ivy",
+        "description": "A climbing or creeping vine in the genus Hedera."
+    },
+    {
+        "name": "Juniper",
+        "description": "A coniferous tree in the cypress family."
+    },
+    {
+        "name": "Kudzu",
+        "description": "A climbing or creeping vine in the genus Pueraria."
+    },
+    {
+        "name": "Larch",
+        "description": "A coniferous tree in the pine family."
+    },
+    {
+        "name": "Maple",
+        "description": "A deciduous tree in the genus Acer."
+    },
+    {
+        "name": "Noble fir",
+        "description": "A coniferous tree in the pine family."
+    },
+    {
+        "name": "Oak",
+        "description": "A deciduous tree in the genus Quercus."
+    },
+    {
+        "name": "Pine",
+        "description": "A coniferous tree in the pine family."
+    },
+    {
+        "name": "Quince",
+        "description": "A flowering shrub in the genus Chaenomeles."
+    },
+    {
+        "name": "Redwood",
+        "description": "A coniferous tree in the cypress family."
+    },
+    {
+        "name": "Spruce",
+        "description": "A coniferous tree in the pine family."
+    },
+    {
+        "name": "Tulip tree",
+        "description": "A flowering tree in the genus Liriodendron."
+    }
+]
