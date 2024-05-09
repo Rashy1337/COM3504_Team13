@@ -5,23 +5,29 @@
   <link rel='stylesheet' href='/stylesheets/style.css' />
 </head>
 <body>
-  <%- include('partials/_header') %>
+<%- include('partials/_header') %>
 
-  <h1><%= title %></h1>
-  <p>Welcome to <%= title %></p>
+<h1><%= title %></h1>
+<p>Welcome to <%= title %></p>
 
-  <div class="heading">
-    <p>Plantfindr is your digital companion for exploring the botanical world. Our progressive web application enables you to record, view, and discuss various plant species with ease. Whether you’re a budding botanist or just curious about the greenery around you, Plantfindr is your gateway to learning more about plants. </p>
-  </div>
+<div class="heading">
+  <p>Plantfindr is your digital companion for exploring the botanical world. Our progressive web application enables you to record, view, and discuss various plant species with ease. Whether you’re a budding botanist or just curious about the greenery around you, Plantfindr is your gateway to learning more about plants. </p>
+</div>
 
-  <div class="plant-container">
-    <% plants.forEach(function(plant) { %>
-      <a href="/plant/<%= encodeURIComponent(plant.name) %>" class="plant-box">
-        <h2><%= plant.name %></h2>
-        <p><%= plant.description %></p>
-        <!-- Add more plant details here as needed -->
-      </a>
-    <% }); %>
-  </div>
+<div class="plant-container">
+  <% plants.forEach((plant) => { %> <!-- Changed 'data' to 'plants' -->
+  <p><strong>Plant Name:</strong> <%= plant.plantName %></p>
+  <p><strong>Plant Size:</strong> <%= plant.plantSize %></p>
+  <p><strong>Date:</strong> <%= plant.dateTime %></p>
+  <p><strong>Characteristics:</strong> <%= plant.plantCharacteristics %></p>
+  <p><strong>Url:</strong> <%= plant.url %></p>
+  <p><strong>Location:</strong> <%= plant.address %></p>
+  <% if (plant.plantPhoto) { %>
+    <img src="<%= plant.plantPhoto %>" width="200" height="200">
+  <% } %>
+  <hr>
+  <% }); %>
+  <hr>
+</div>
 </body>
 </html>

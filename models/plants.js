@@ -6,7 +6,7 @@ let plantSchema = new Schema({
 
     plantName: { type: String, required: true },
     dateTime: { type: Date},
-    plantSize: { type: Number },
+    plantSize: { type: String },
     plantCharacteristics: { type: String},
     plantPhoto: { type: String},
     url: { type: String},
@@ -16,6 +16,6 @@ let plantSchema = new Schema({
 
 plantSchema.set('toObject', { getters: true, virtuals: true });
 
-let Plant = mongoose.model('Plant', plantSchema);
+let Plant = mongoose.model('plant', plantSchema);
 
 module.exports = Plant;

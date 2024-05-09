@@ -6,7 +6,7 @@ exports.create = function(plantsData, filePath) {
         dateTime: plantsData.dateTime,
         plantSize: plantsData.plantSize,
         plantCharacteristics: plantsData.plantCharacteristics,
-        plantPhoto: filePath,
+        plantPhoto: filePath, // Use filePath from arguments
         url: plantsData.url,
         address: plantsData.address
     });
@@ -15,10 +15,10 @@ exports.create = function(plantsData, filePath) {
         console.log(plant);
 
         return JSON.stringify(plant);
-}).catch((err) => {
-    console.log(err);
-    return null;
-});
+    }).catch((err) => {
+        console.log(err);
+        return null;
+    });
 };
 
 exports.getAll = function() {
