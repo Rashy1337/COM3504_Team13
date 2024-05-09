@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const mongoDB = 'mongodb://localhost:27017/plants';
+const mongoDB = 'mongodb://localhost:27017/plant';
 let connection;
 
 mongoose.Promise = global.Promise;
@@ -12,9 +12,8 @@ mongoose.connect(mongoDB).then(result => {
 
 connection = result.connection;
 
-console.log(`Connected to ${mongoDB}`);
+    console.log("Connection Successful!");
 }).catch(err => {
-
-console.log(`Error connecting to ${mongoDB}: ${err}`);
-
+    // Log an error message if the connection fails
+    console.log("Connection Failed!", err);
 })
