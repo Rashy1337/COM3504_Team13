@@ -3,12 +3,34 @@
 <head>
   <title><%= title %></title>
   <link rel='stylesheet' href='/stylesheets/style.css' />
+  <link rel='stylesheet' href='/stylesheets/details.css' />
 </head>
 <body>
   <%- include('partials/_header') %>
 
-  <h1><%= plant.plantName %></h1>
-  <p><%= plant.plantCharacteristics %></p>
+  <div class="details-container"> 
+    <img src="<%= plant.plantPhoto %>" alt="Plant Photo">
+    <h1><%= plant.plantName %></h1>
+    <div class="details">
+      <p data-label="Characteristics: "><%= plant.plantCharacteristics %></p>
+      <p data-label="Time: "><%= plant.dateTime %></p>
+      <p data-label="Size: "><%= plant.plantSize %></p>
+      <p data-label="Url: "><%= plant.url %></p>
+      <p data-label="Address: "><%= plant.address %></p>
+    </div>
+  </div>
 
+  <div class="chat-container">
+    <div class="chat-header">
+      <h4>Chat</h4>
+    </div>
+    <div class="chat-messages">
+      <!-- Messages will be added here -->
+    </div>
+    <div class="chat-input">
+      <input type="text" placeholder="Type a message...">
+      <button>Send</button>
+    </div>
+  </div>
 </body>
 </html>

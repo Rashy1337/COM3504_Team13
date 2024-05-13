@@ -21,8 +21,25 @@ exports.create = function(plantsData, filePath) {
     });
 };
 
-exports.getAll = function() {
-    return plantsModel.find({}).then(plants => {
+exports.getAll = function(sort) {
+    console.log('Sort value in controller:', sort);
+    let sortOptions = {};
+    switch (sort) {
+        case 'name-asc':
+            sortOptions.plantName = 1;
+            break;
+        case 'name-desc':
+            sortOptions.plantName = -1;
+            break;
+        case 'date':
+            sortOptions.dateTime = 1;
+            break;
+        case 'location':
+            sortOptions.address = 1;
+            break;
+    }
+    return plantsModel.find({}).sort(sortOptions).then(plants => {
+        console.log(plants);
         return JSON.stringify(plants);
     }).catch(err => {
         console.log(err);

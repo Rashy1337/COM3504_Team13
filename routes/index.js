@@ -19,14 +19,13 @@ var storage = multer.diskStorage({
 let upload = multer({ storage: storage });
 
 /* GET home page. */
-/* GET home page. */
 router.get('/', function(req, res, next) {
-    let result = plants.getAll();
-    result.then(plants => {
-        let data = JSON.parse(plants);
-        // console.log(data.length);
-        res.render('index', { title: 'Plant Findr!', plants: data }); // Changed 'plants' to 'data'
-    });
+  console.log('Sort value in routes:', req.query.sort);
+  let result = plants.getAll(req.query.sort);
+  result.then(data => {
+    let parsedData = JSON.parse(data);
+    res.render('index', { title: 'Plant Findr!', plants: parsedData });
+  });
 });
 
 /* GET upload page. */
