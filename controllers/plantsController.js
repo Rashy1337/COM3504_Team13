@@ -1,4 +1,5 @@
 const plantsModel = require('../models/plants');
+const axios = require('axios');
 
 exports.create = function(plantsData, filePath) {
     let plant = new plantsModel({
@@ -47,9 +48,36 @@ exports.getAll = function(sort) {
     });
 };
 
+
 exports.getPlant = function(plantName) {
     return plantsModel.findOne({ plantName: plantName }).then(plant => {
-        return plant;
+        let plantObject = plant.toObject();
+        let dbpediaUrl = `http://dbpedia.org/sparql`;
+        let sparqlQuery = `
+            SELECT ?comment WHERE {
+                <http://dbpedia.org/resource/${encodeURIComponent(plantName)}> rdfs:comment ?comment .
+                FILTER (lang(?comment) = 'en')
+            }
+        `;
+        let config = {
+            params: {
+                query: sparqlQuery,
+                format: 'json'
+            }
+        };
+        return axios.get(dbpediaUrl, config)
+            .then(response => {
+                let data = response.data;
+                if (data.results.bindings.length > 0) {
+                    let comment = data.results.bindings[0].comment.value;
+                    plantObject.description = comment;
+                }
+                return plantObject;
+            })
+            .catch(error => {
+                console.error(error);
+                return plantObject;
+            });
     }).catch(err => {
         console.log(err);
         return null;
