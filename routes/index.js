@@ -33,13 +33,25 @@ router.get('/upload', function(req, res, next) {
     res.render('upload', { title: 'Upload Page' });
 });
 
-router.post('/upload', upload.single('plantPhoto'), function(req, res, next) {
+router.post('/upload', upload.single('plantPhoto'), async function(req, res, next) {
     let plantsData = req.body;
     let filePath = req.file.path;
     filePath = filePath.replace('public', ''); // Convert local file path to URL path
     plantsData.plantPhoto = filePath;
-    let results = plants.create(plantsData, filePath); // Pass filePath to create function
-    console.log(results);
+
+    let locationData = JSON.parse(req.body.location); // Parse location data
+    plantsData.location = {
+        type: 'Point',
+        coordinates: [locationData.lng, locationData.lat] // Use lng and lat values to create coordinates array
+    };
+
+    try {
+        let results = await plants.create(plantsData, filePath); // Wait for the promise to resolve
+        console.log(results);
+    } catch (error) {
+        console.error(error);
+        // Handle error here, for example, render an error page
+    }
     res.redirect('/');
 });
 

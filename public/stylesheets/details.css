@@ -11,7 +11,7 @@
     margin-top: 1vh;
 }
 
-.details-container img {
+.details-container .plant-photo {
     width: 30vw;
     height: 30vw; 
     border-radius: 20px;
@@ -51,6 +51,20 @@
     text-transform: capitalize;
   }
 
+
+  .image-map-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  #map {
+    width: 30vw;
+    height: 30vw;
+    margin-left: 2vw;
+    border-radius: 20px;
+    border: none;
+  }
 
 /* dummy chat  */
 .chat-container {

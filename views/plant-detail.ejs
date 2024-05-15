@@ -7,9 +7,12 @@
 </head>
 <body>
   <%- include('partials/_header') %>
-
   <div class="details-container"> 
-    <img src="<%= plant.plantPhoto %>" alt="Plant Photo">
+
+    <div class="image-map-container">
+      <img class="plant-photo" src="<%= plant.plantPhoto %>" alt="Plant Photo">
+      <div id="map" style="height: 400px;"></div>
+    </div>
     <h1><%= plant.plantName %></h1>
 
     <!-- Chat container -->
@@ -32,11 +35,32 @@
       <p data-label="DBpedia: "><%= plant.description %></p>
       <p data-label="Time: "><%= plant.dateTime %></p>
       <p data-label="Size: "><%= plant.plantSize %></p>
-      <p data-label="Url: "><%= plant.url %></p>
-      <p data-label="Address: "><%= plant.address %></p>
+      <p data-label="Scientific Name: "><%= plant.taxon %></p>
+      <p data-label="For more Info: "><a href="<%= plant.plantUri %>"><%= plant.plantUri %></a></p>
     </div>
+    
   </div>
 
+  <script>
+    function initMap() {
+      var plantLocation = JSON.parse('<%- JSON.stringify(plant.location) %>');
+      // console.log('Plant Location:', plantLocation);
+      
+      var pos = { lat: plantLocation.coordinates[1], lng: plantLocation.coordinates[0] };
+      console.log('Position:', pos);
+      
+      var map = new google.maps.Map(document.getElementById('map'), {
+        center: pos,
+        zoom: 6
+      });
+      
+      var marker = new google.maps.Marker({
+        position: pos,
+        map: map
+      });
+    }
+  </script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAhZ5Qt2ta-Pb71y5QViO2DPXuRVJmOFvI&callback=initMap"></script>
 
 </body>
 </html>

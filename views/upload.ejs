@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html>
+
+
+
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title %></title>
@@ -10,6 +13,64 @@
         }
     </style>
 </head>
+
+<!-- scripting -->
+<script>
+    function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: -34.397, lng: 150.644},
+            zoom: 6
+        });
+    
+        var marker = new google.maps.Marker({
+            position: {lat: -34.397, lng: 150.644},
+            map: map,
+            draggable: true
+        });
+    
+        // Update the location field when the marker is dragged
+        google.maps.event.addListener(marker, 'dragend', function(evt) {
+            var pos = {
+                lat: evt.latLng.lat(),
+                lng: evt.latLng.lng()
+            };
+            document.getElementById('location').value = JSON.stringify(pos);
+        });
+    
+        // Try HTML5 geolocation.
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+    
+                marker.setPosition(pos);
+                map.setCenter(pos);
+    
+                // Store position data in the hidden input field
+                document.getElementById('location').value = JSON.stringify(pos);
+            }, function() {
+                handleLocationError(true, map.getCenter());
+            });
+        } else {
+            // Browser doesn't support Geolocation
+            handleLocationError(false, map.getCenter());
+        }
+    }
+    
+    function handleLocationError(browserHasGeolocation, pos) {
+        var infoWindow = new google.maps.InfoWindow({map: map});
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+                              'Error: The Geolocation service failed.' :
+                              'Error: Your browser doesn\'t support geolocation.');
+    }
+</script>
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAhZ5Qt2ta-Pb71y5QViO2DPXuRVJmOFvI&callback=initMap">
+</script>
+
 <body>
     <%- include('partials/_header') %>
 <h1>Fill Plant Details</h1>
@@ -37,6 +98,11 @@
 
         <label for="url">Enter URL:</label><br>
         <input type="url" id="url" name="url"><br><br>
+
+        <input type="hidden" id="location" name="location">
+        <br><br>
+
+        <div id="map" style="height: 400px;"></div>
 
         <label for="address">Address:</label><br>
         <input type="text" id="address" name="address"><br><br>

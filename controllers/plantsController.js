@@ -9,7 +9,8 @@ exports.create = function(plantsData, filePath) {
         plantCharacteristics: plantsData.plantCharacteristics,
         plantPhoto: filePath, // Use filePath from arguments
         url: plantsData.url,
-        address: plantsData.address
+        address: plantsData.address,
+        location: plantsData.location
     });
 
     return plant.save().then(plant => {
@@ -40,7 +41,7 @@ exports.getAll = function(sort) {
             break;
     }
     return plantsModel.find({}).sort(sortOptions).then(plants => {
-        console.log(plants);
+        // console.log(plants);
         return JSON.stringify(plants);
     }).catch(err => {
         console.log(err);
@@ -56,19 +57,45 @@ exports.getPlant = function(plantName) {
     return plantsModel.findOne({ plantName: plantName }).then(plant => {
         let plantObject = plant.toObject();
         let dbpediaUrl = `http://dbpedia.org/sparql`;
-        let sparqlQuery = `
-            SELECT ?comment WHERE {
-                <http://dbpedia.org/resource/${encodeURIComponent(dbpediaPlantName)}> rdfs:comment ?comment .
-                FILTER (lang(?comment) = 'en')
-            }
-        `;
-        let config = {
+
+        let sparqlQueryComment = `
+        SELECT ?comment WHERE {
+            <http://dbpedia.org/resource/${encodeURIComponent(dbpediaPlantName)}> rdfs:comment ?comment .
+            FILTER (lang(?comment) = 'en')
+        }`;
+
+        let sparqlQueryTaxon = `
+        SELECT ?taxon WHERE {
+            <http://dbpedia.org/resource/${encodeURIComponent(dbpediaPlantName)}> dbp:taxon ?taxon .
+        }`;
+
+        let sparqlQueryUri = `
+        SELECT ?plantUri WHERE {
+            BIND(<http://dbpedia.org/resource/${encodeURIComponent(dbpediaPlantName)}> AS ?plantUri)
+        }`;
+
+        let configComment = {
             params: {
-                query: sparqlQuery,
+                query: sparqlQueryComment,
                 format: 'json'
             }
         };
-        return axios.get(dbpediaUrl, config)
+
+        let configTaxon = {
+            params: {
+                query: sparqlQueryTaxon,
+                format: 'json'
+            }
+        };
+
+        let configUri = {
+            params: {
+                query: sparqlQueryUri,
+                format: 'json'
+            }
+        };
+
+        return axios.get(dbpediaUrl, configComment)
             .then(response => {
                 let data = response.data;
                 if (data.results.bindings.length > 0) {
@@ -77,7 +104,38 @@ exports.getPlant = function(plantName) {
                 } else {
                     plantObject.description = "DBpedia did not manage to get any information about this plant";
                 }
-                return plantObject;
+
+                return axios.get(dbpediaUrl, configTaxon)
+                    .then(response => {
+                        let data = response.data;
+                        if (data.results.bindings.length > 0) {
+                            let taxon = data.results.bindings[0].taxon.value;
+                            plantObject.taxon = taxon;
+                        } else {
+                            plantObject.taxon = "Taxon not found";
+                        }
+
+                        return axios.get(dbpediaUrl, configUri)
+                            .then(response => {
+                                let data = response.data;
+                                if (data.results.bindings.length > 0) {
+                                    let plantUri = data.results.bindings[0].plantUri.value;
+                                    plantObject.plantUri = plantUri;
+                                } else {
+                                    plantObject.plantUri = "Plant URI not found";
+                                }
+
+                                return plantObject;
+                            })
+                            .catch(error => {
+                                console.error(error);
+                                return plantObject;
+                            });
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        return plantObject;
+                    });
             })
             .catch(error => {
                 console.error(error);
