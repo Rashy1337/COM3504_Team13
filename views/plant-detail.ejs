@@ -11,6 +11,22 @@
   <div class="details-container"> 
     <img src="<%= plant.plantPhoto %>" alt="Plant Photo">
     <h1><%= plant.plantName %></h1>
+
+    <!-- Chat container -->
+    <div class="chat-container">
+      <div class="chat-header">
+        <h4>Chat</h4>
+      </div>
+      <div class="chat-messages">
+        <!-- Messages will be added here -->
+      </div>
+      <div class="chat-input">
+        <input type="text" placeholder="Type a message...">
+        <button>Send</button>
+      </div>
+    </div>
+
+    <!-- Details container -->
     <div class="details">
       <p data-label="Characteristics: "><%= plant.plantCharacteristics %></p>
       <p data-label="DBpedia: "><%= plant.description %></p>
@@ -21,17 +37,6 @@
     </div>
   </div>
 
-  <div class="chat-container">
-    <div class="chat-header">
-      <h4>Chat</h4>
-    </div>
-    <div class="chat-messages">
-      <!-- Messages will be added here -->
-    </div>
-    <div class="chat-input">
-      <input type="text" placeholder="Type a message...">
-      <button>Send</button>
-    </div>
-  </div>
+
 </body>
 </html>

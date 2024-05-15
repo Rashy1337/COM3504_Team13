@@ -55,8 +55,8 @@
 /* dummy chat  */
 .chat-container {
     position: fixed;
-    bottom: 2vh;
-    right: 5vw; /* Increase right margin */
+    bottom: 30vh; /* Adjust to center vertically */
+    right: 0; /* Start from the right edge */
     width: 30vw;
     height: 50vh;
     background-color: #fff;
@@ -64,15 +64,15 @@
     box-shadow: 0 0 1em rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    animation: slide-up 0.5s ease-out forwards; /* Add animation */
+    animation: slide-in 0.5s ease-out forwards; /* Change animation name */
 }
 
-@keyframes slide-up {
+@keyframes slide-in {
     0% {
-        transform: translateY(100%);
+        transform: translateX(100%); /* Start from the right */
     }
     100% {
-        transform: translateY(0);
+        transform: translateX(0); /* End at the current position */
     }
 }
 
@@ -123,3 +123,14 @@
 .sort-bar select {
     padding: 0.5em;
 }
+
+/* Media query */
+@media (max-width: 1800px) {
+    .details {
+      margin-top: 10vh;
+    }
+  
+    .chat-container {
+      bottom: 40vh;
+    } 
+  }
