@@ -68,7 +68,7 @@ a {
   overflow-y: scroll;
   scrollbar-width: thin;
   scrollbar-color: var(--background-color) #E4E4E7;
-  max-height: 100vh;
+  max-height: 75vh;
   overscroll-behavior-y: contain;
 }
 
@@ -91,7 +91,7 @@ a {
 .plant-box {
   width: 40vw; 
   height: 20vh;
-  max-width: 90vw;
+  /* max-width: 90vw; */
   border-radius: 2em;
   box-shadow: 2vh 2vh 8vh rgba(0,0,0,0.1);
   padding: 2vh 2vh 2.8vh 2vh;

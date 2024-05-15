@@ -50,12 +50,15 @@ exports.getAll = function(sort) {
 
 
 exports.getPlant = function(plantName) {
+    // Capitalize first letter and make the rest lowercase for DBpedia query
+    let dbpediaPlantName = plantName.charAt(0).toUpperCase() + plantName.slice(1).toLowerCase();
+
     return plantsModel.findOne({ plantName: plantName }).then(plant => {
         let plantObject = plant.toObject();
         let dbpediaUrl = `http://dbpedia.org/sparql`;
         let sparqlQuery = `
             SELECT ?comment WHERE {
-                <http://dbpedia.org/resource/${encodeURIComponent(plantName)}> rdfs:comment ?comment .
+                <http://dbpedia.org/resource/${encodeURIComponent(dbpediaPlantName)}> rdfs:comment ?comment .
                 FILTER (lang(?comment) = 'en')
             }
         `;
@@ -71,6 +74,8 @@ exports.getPlant = function(plantName) {
                 if (data.results.bindings.length > 0) {
                     let comment = data.results.bindings[0].comment.value;
                     plantObject.description = comment;
+                } else {
+                    plantObject.description = "DBpedia did not manage to get any information about this plant";
                 }
                 return plantObject;
             })
