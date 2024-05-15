@@ -44,3 +44,11 @@ router.post('/upload', upload.single('plantPhoto'), function(req, res, next) {
 });
 
 module.exports = router;
+
+
+//navigator.serviceWorker.register('/sw.js')
+//    .then((registration) => {
+  //      console.log('SW registered: ', registration.scope);
+    //},(registrationError) => {
+ //       console.log('SW registration failed: ', registrationError);
+ //   });
