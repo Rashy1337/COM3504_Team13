@@ -19,25 +19,61 @@ var storage = multer.diskStorage({
 });
 let upload = multer({ storage: storage });
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-    User.findOne({}) // Retrieve the first user from the database
+
+// middleware
+
+// rec locals storage for user
+router.use((req, res, next) => {
+    const username = req.headers['x-user']; // Get the username from the request headers
+    if (!username) {
+        return next(); // If there's no username, just continue
+    }
+    User.findOne({ username }) // Retrieve the user from the database
+        .then(user => {
+            if (user) {
+                res.locals.user = user; // Store the user data in res.locals
+            }
+            next();
+        })
+        .catch(err => next(err));
+});
+
+// check if username exists
+router.post('/check-username', function(req, res, next) {
+    User.findOne({ username: req.body.username }) // Find the user in the database
         .then(user => {
             if (!user) {
-                // If the user hasn't been set, redirect to the set-username page
-                res.redirect('/set-username');
+                // If the user doesn't exist, send a response indicating to redirect
+                res.json({ shouldRedirect: true });
             } else {
-                // Retrieve all plants from the database with sorting
-                // console.log('Sort value in routes:', req.query.sort);
-                let result = plants.getAll(req.query.sort, user.username);
-                result.then(plants => {
-                    // Pass the user and plants objects to the view
-                    res.render('index', { title: 'Plant Findr!', user: user, plants: plants });
-                })
-                .catch(err => next(err));
+                // If the user does exist, send a response indicating not to redirect
+                res.json({ shouldRedirect: false });
             }
         })
         .catch(err => next(err));
+});
+
+// logout
+router.get('/logout', function(req, res, next) {
+    req.session = null; // Clear the session
+    res.redirect('/set-username'); // Redirect to the set-username page
+});
+
+/* GET home page. */
+router.get('/', function(req, res, next) {
+    let user = res.locals.user; // Retrieve the user data from res.locals
+    if (!user) {
+        // If the user hasn't been set, redirect to the set-username page
+        res.redirect('/set-username');
+    } else {
+        // Retrieve all plants from the database with sorting
+        let result = plants.getAll(req.query.sort, user.username);
+        result.then(plants => {
+            // Pass the user and plants objects to the view
+            res.render('index', { title: 'Plant Findr!', user: user, plants: plants });
+        })
+        .catch(err => next(err));
+    }
 });
 
 router.get('/set-username', function(req, res, next) {
@@ -45,30 +81,32 @@ router.get('/set-username', function(req, res, next) {
 });
 
 router.post('/set-username', function(req, res, next) {
-    console.log(req.body); // Log the body of the request
-    let location = JSON.parse(req.body.location);
-    let user = new User({
-        username: req.body.username,
-        location: {
-            type: 'Point',
-            coordinates: [location.lng, location.lat]
-        }
-    });
-    user.save()
-        .then(() => {
-            console.log('User saved successfully'); // Log success message
-            res.redirect('/')
-        })
-        .catch(err => {
-            console.log('Error saving user:', err); // Log error message
-            next(err);
-        });
-});
-
-router.post('/change-username', function(req, res, next) {
-    User.findOneAndUpdate({}, { username: req.body.newUsername }) // Update the first user in the database
-        .then(() => {
-            res.redirect('/');
+    User.findOne({ username: req.body.username }) // Check if the username already exists
+        .then(user => {
+            if (user) {
+                console.log('User already exists, logging in'); // Log message
+                res.redirect('/'); // Redirect to the home page
+            } else {
+                // If the user doesn't exist, create a new user
+                let location = JSON.parse(req.body.location);
+                let user = new User({
+                    username: req.body.username,
+                    location: {
+                        type: 'Point',
+                        coordinates: [location.lng, location.lat]
+                    }
+                });
+                user.save()
+                    .then(() => {
+                        console.log('User saved successfully'); // Log success message
+                        req.session.username = req.body.username; // Store username in session
+                        res.redirect('/')
+                    })
+                    .catch(err => {
+                        console.log('Error saving user:', err); // Log error message
+                        next(err);
+                    });
+            }
         })
         .catch(err => next(err));
 });

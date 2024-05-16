@@ -43,5 +43,28 @@
       </a>
     <% }); %>
   </div>
+
+  <script>
+    // Get the username from local storage
+    var username = localStorage.getItem('username');
+  
+    // Send a POST request to the server with the username
+    fetch('/check-username', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ username: username })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.shouldRedirect) {
+        // If the server responded with shouldRedirect: true, redirect to the set-username page
+        window.location.href = '/set-username';
+      }
+    });
+  </script>
+
+
 </body>
 </html>

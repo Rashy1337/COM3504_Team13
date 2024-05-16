@@ -76,5 +76,23 @@
             </form>
         </div>
     </div>
+
+    <!-- Store the username in local storage -->
+    <script>
+        // Add event listener to form submission
+        document.querySelector('.card-form').addEventListener('submit', function(event) {
+            // Prevent default form submission
+            event.preventDefault();
+
+            // Get the username
+            var username = document.getElementById('username').value;
+
+            // Store the username in local storage
+            localStorage.setItem('username', username);
+
+            // Manually submit the form
+            event.target.submit();
+        });
+    </script>
 </body>
 </html>

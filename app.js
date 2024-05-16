@@ -1,7 +1,6 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
-var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyParser = require('body-parser'); // new body parser
 
@@ -18,7 +17,6 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/public/images/uploads', express.static(path.join(__dirname, '/public/images/uploads')));
 app.use(bodyParser.urlencoded({ extended: false })) // new body parser
@@ -40,6 +38,16 @@ app.use(function(err, req, res, next) {
     // render the error page
     res.status(err.status || 500);
     res.render('error');
+});
+
+
+// server listening on port 3000
+var port = `3000` || process.env.PORT;
+
+app.set('port', port);
+
+var server = app.listen(port, function() {
+    console.log(`Server listening on port ${port}`);
 });
 
 module.exports = app;
