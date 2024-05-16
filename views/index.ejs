@@ -14,6 +14,11 @@
     <p>Plantfindr is your digital companion for exploring the botanical world. Our progressive web application enables you to record, view, and discuss various plant species with ease. Whether you’re a budding botanist or just curious about the greenery around you, Plantfindr is your gateway to learning more about plants. </p>
   </div>
 
+  <form action="/change-username" method="post" class="change-username-form">
+    <label for="newUsername">Change Username:</label><br>
+    <input type="text" id="newUsername" name="newUsername" value="<%= user.username %>"><br><br>
+    <input type="submit" value="Change Username">
+  </form>
 
   <div class="sort-bar">
     <label for="sort">Sort by:</label>

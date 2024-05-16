@@ -1,26 +1,37 @@
 const plantsModel = require('../models/plants');
+var User = require('../models/user');
 const axios = require('axios');
 
-exports.create = function(plantsData, filePath) {
-    let plant = new plantsModel({
-        plantName: plantsData.plantName,
-        dateTime: plantsData.dateTime,
-        plantSize: plantsData.plantSize,
-        plantCharacteristics: plantsData.plantCharacteristics,
-        plantPhoto: filePath, // Use filePath from arguments
-        url: plantsData.url,
-        address: plantsData.address,
-        location: plantsData.location
-    });
+exports.create = function(plantsData, filePath, username) {
+    User.findOne({ username: username })
+        .then(user => {
+            if (!user) throw new Error('User not found');
 
-    return plant.save().then(plant => {
-        console.log(plant);
+            let plant = new plantsModel({
+                plantName: plantsData.plantName,
+                dateTime: plantsData.dateTime,
+                plantSize: plantsData.plantSize,
+                plantCharacteristics: plantsData.plantCharacteristics,
+                plantPhoto: filePath, // Use filePath from arguments
+                url: plantsData.url,
+                address: plantsData.address,
+                location: plantsData.location,
+                username: user.username
+            });
 
-        return JSON.stringify(plant);
-    }).catch((err) => {
-        console.log(err);
-        return null;
-    });
+            return plant.save().then(plant => {
+                console.log(plant);
+
+                return JSON.stringify(plant);
+            }).catch((err) => {
+                console.log(err);
+                return null;
+            });
+        })
+        .catch(err => {
+            console.error(err);
+            // Handle error here, for example, render an error page
+        });
 };
 
 exports.getAll = function(sort) {

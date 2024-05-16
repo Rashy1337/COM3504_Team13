@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyParser = require('body-parser'); // new body parser
 
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var plantsRouter = require('./routes/plants'); // new plants router
@@ -25,6 +26,8 @@ app.use(bodyParser.urlencoded({ extended: false })) // new body parser
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/plant', plantsRouter); // new plants router
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

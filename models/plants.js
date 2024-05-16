@@ -36,6 +36,11 @@ let plantSchema = new Schema({
             type: [Number],
             required: true
         }
+    },
+    username: {
+        type: String,
+        required: true
+
     }
 
 });
