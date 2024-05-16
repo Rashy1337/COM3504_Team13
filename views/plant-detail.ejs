@@ -5,11 +5,11 @@
   <link rel='stylesheet' href='/stylesheets/style.css' />
   <link rel='stylesheet' href='/stylesheets/details.css' />
   <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-  <script src="/javascripts/chat.js" ></script>
+  <script src="/javascripts/chat.js"></script>
 </head>
 <body>
   <%- include('partials/_header') %>
-  <div class="details-container"> 
+  <div class="details-container">
 
     <div class="image-map-container">
       <img class="plant-photo" src="<%= plant.plantPhoto %>" alt="Plant Photo">
@@ -26,6 +26,7 @@
         <!-- Messages will be added here -->
       </div>
       <div class="chat-input">
+        <input type="hidden" id="plantID" value="<%= plant._id %>">
         <input type="text" id="chat_input" placeholder="Type a message...">
         <button type="button">Send</button>
       </div>

@@ -1,14 +1,18 @@
-const Chat = require('../models/chat'); // Assuming you have a Chat model
+const Chat = require('../models/chat');
 
 exports.init = function(io) {
   io.on('connection', function(socket) {
-      socket.on('chat message', async function(msg) {
-          // Save message to database
-          const chatMessage = new Chat({ message: msg, timestamp: new Date() });
-          await chatMessage.save();
+    socket.on('join room', async function(plantID) {
+      socket.join(plantID);
+      // Fetch chat history for the plant
+      const messages = await Chat.find({ plantID }).sort('timestamp').exec();
+      socket.emit('chat history', messages);
+    });
 
-          // Emit the message to all connected clients
-          io.emit('chat message', msg);
-      });
+    socket.on('chat message', async function({ plantID, msg }) {
+      const chatMessage = new Chat({ plantID, message: msg, timestamp: new Date() });
+      await chatMessage.save();
+      io.to(plantID).emit('chat message', chatMessage);
+    });
   });
 }
