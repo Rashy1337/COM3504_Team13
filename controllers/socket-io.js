@@ -4,7 +4,6 @@ exports.init = function(io) {
   io.on('connection', function(socket) {
     socket.on('join room', async function(plantID) {
       socket.join(plantID);
-      // Fetch chat history for the plant
       const messages = await Chat.find({ plantID }).sort('timestamp').exec();
       socket.emit('chat history', messages);
     });
