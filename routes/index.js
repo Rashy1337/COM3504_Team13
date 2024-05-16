@@ -113,3 +113,13 @@ router.post('/upload', upload.single('plantPhoto'), async function(req, res, nex
 });
 
 module.exports = router;
+
+console.log('Service Worker Called...');
+self.addEventListener('install', (event) => {
+    console.log('[Service Worker] : Installed');
+    event.waitUntil(caches.open('core').then((cache) => {
+        cache.add(new Request('cached.html')).then(() => {
+            console.log('[Service Worker] : Cached cached.html')
+        });
+    }));
+});
