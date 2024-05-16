@@ -4,6 +4,8 @@
   <title><%= title %></title>
   <link rel='stylesheet' href='/stylesheets/style.css' />
   <link rel='stylesheet' href='/stylesheets/details.css' />
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+  <script src="/javascripts/chat.js" ></script>
 </head>
 <body>
   <%- include('partials/_header') %>
@@ -20,12 +22,12 @@
       <div class="chat-header">
         <h4>Chat</h4>
       </div>
-      <div class="chat-messages">
+      <div id="chat-messages" class="chat-messages">
         <!-- Messages will be added here -->
       </div>
       <div class="chat-input">
-        <input type="text" placeholder="Type a message...">
-        <button>Send</button>
+        <input type="text" id="chat_input" placeholder="Type a message...">
+        <button type="button">Send</button>
       </div>
     </div>
 
@@ -44,16 +46,11 @@
   <script>
     function initMap() {
       var plantLocation = JSON.parse('<%- JSON.stringify(plant.location) %>');
-      // console.log('Plant Location:', plantLocation);
-      
       var pos = { lat: plantLocation.coordinates[1], lng: plantLocation.coordinates[0] };
-      console.log('Position:', pos);
-      
       var map = new google.maps.Map(document.getElementById('map'), {
         center: pos,
         zoom: 6
       });
-      
       var marker = new google.maps.Marker({
         position: pos,
         map: map
@@ -61,6 +58,5 @@
     }
   </script>
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAhZ5Qt2ta-Pb71y5QViO2DPXuRVJmOFvI&callback=initMap"></script>
-
 </body>
 </html>
