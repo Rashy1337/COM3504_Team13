@@ -31,17 +31,16 @@
 
     <!-- Details container -->
     <div class="details">
-      <p data-label="Characteristics: "><%= plant.plantCharacteristics %></p>
+      <p class="short" data-label="Characteristics: "><%= plant.plantCharacteristics %></p>
       <p data-label="Uploaded by: "><%= plant.username %></p>
-      <p data-label="DBpedia: "><%= plant.description %></p>
-      <p data-label="Time: "><%= plant.dateTime %></p>
+      <p class="long" data-label="DBpedia: "><%= plant.description %></p>
+      <p class="date" data-label="Time: "><%= plant.dateTime %></p>
       <p data-label="Size: "><%= plant.plantSize %></p>
       <p data-label="Scientific Name: "><%= plant.taxon %></p>
       <p data-label="For more Info: "><a href="<%= plant.plantUri %>"><%= plant.plantUri %></a></p>
     </div>
     
   </div>
-
   <script>
     function initMap() {
       var plantLocation = JSON.parse('<%- JSON.stringify(plant.location) %>');

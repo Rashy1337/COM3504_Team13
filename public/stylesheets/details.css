@@ -2,6 +2,11 @@
     --title-color: #000;
     --text-color: #666;
     --border-color: yellow;
+    --background-color: #83df6d;
+}
+
+body {
+    overflow: scroll;
 }
 
 .details-container {
@@ -35,27 +40,49 @@
     display: grid;
     grid-template-columns: auto 1fr;
     gap: 2vw;
-    align-items: center;
+    align-items: start; /* align to the top */
     margin-top: 1vh;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 1em;
 }
-  
-  .details p {
+
+.details p {
     margin: 0;
-  }
-  
-  .details p::before {
+    grid-column: span 2; /* make each item span two columns */
+}
+
+.details p::before {
     content: attr(data-label);
     font-weight: bold;
     text-transform: capitalize;
-  }
+    display: block; /* make the label a block element */
+}
+
+/* Add a class for items with longer content */
+.details .long {
+    grid-column: span 2; /* make it span two columns */
+    font-size: 1em; /* adjust font size as needed */
+}
+
+/* Add a class for items with shorter content */
+.details .short {
+    grid-column: span 1; /* make it span one column */
+    font-size: 0.875em; /* adjust font size as needed */
+}
+
+/* Add a class for items with date content */
+.details .date {
+    grid-column: span 1; /* make it span one column */
+    font-size: 0.875em; /* adjust font size as needed */
+    font-style: italic; /* make the date italic */
+}
 
 
   .image-map-container {
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: -1;
   }
   
   #map {

@@ -1,7 +1,34 @@
+<link rel='stylesheet' href='/stylesheets/header.css' />
 <div class="header">
     <p>Plant<br>Findr</p>
     <div class="nav">
         <a href="/">Home</a>
         <a href="/Upload">Upload</a>
     </div>
+    <div class="user">
+        <div class="username-display">
+            <p><%= user.username %></p>
+            <button id="edit-username-button">Edit</button>
+        </div>
+        
+        <div id="change-username-form" style="display: none;">
+            <form action="/change-username" method="post">
+                <label for="newUsername">Change Username:</label>
+                <input type="text" id="newUsername" name="newUsername" value="<%= user.username %>">
+                <input type="submit" value="Change Username">
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('edit-username-button').addEventListener('click', function() {
+            var form = document.getElementById('change-username-form');
+            if (form.style.display === 'block') {
+                form.style.display = 'none';
+            } else {
+                form.style.display = 'block';
+            }
+        });
+    </script>
 </div>
+

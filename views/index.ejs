@@ -3,54 +3,45 @@
 <head>
   <title><%= title %></title>
   <link rel='stylesheet' href='/stylesheets/style.css' />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 </head>
 <body>
   <%- include('partials/_header') %>
 
   <h1><%= title %></h1>
-  <p>Welcome to <%= title %></p>
 
   <div class="heading">
     <p>Plantfindr is your digital companion for exploring the botanical world. Our progressive web application enables you to record, view, and discuss various plant species with ease. Whether you’re a budding botanist or just curious about the greenery around you, Plantfindr is your gateway to learning more about plants. </p>
   </div>
 
-  <form action="/change-username" method="post" class="change-username-form">
-    <label for="newUsername">Change Username:</label><br>
-    <input type="text" id="newUsername" name="newUsername" value="<%= user.username %>"><br><br>
-    <input type="submit" value="Change Username">
-  </form>
-
   <div class="sort-bar">
-    <label for="sort">Sort by:</label>
-    <select id="sort">
-      <option value="default">Default</option>
-      <option value="name-asc">Name (A-Z)</option>
-      <option value="name-desc">Name (Z-A)</option>
-      <option value="date">Date</option>
-      <option value="location">Location</option>
-    </select>
+    <button class="sort-btn" data-sort="default"><i class="bi bi-bootstrap-fill"></i> Default</button>
+    <button class="sort-btn" data-sort="name-asc"><i class="bi bi-sort-alpha-down"></i> Name (A-Z)</button>
+    <button class="sort-btn" data-sort="name-desc"><i class="bi bi-sort-alpha-up"></i> Name (Z-A)</button>
+    <button class="sort-btn" data-sort="date"><i class="bi bi-calendar"></i> Date</button>
+    <button class="sort-btn" data-sort="location"><i class="bi bi-geo-alt"></i> Nearest</button>
   </div>
 
   <script>
-    document.getElementById('sort').addEventListener('change', function() {
-      // console.log('Sort value in front-end:', this.value);
-      window.location.href = '/?sort=' + this.value;
+    document.querySelectorAll('.sort-btn').forEach(function(button) {
+      button.addEventListener('click', function() {
+        window.location.href = '/?sort=' + this.dataset.sort;
+      });
     });
   </script>
 
-<div class="plant-container">
-  <% plants.forEach((plant) => { %>
-    <a href="/plant/<%= encodeURIComponent(plant.plantName) %>" class="plant-box">
-      <div class="text-container">
-        <p>| <%= new Date(plant.dateTime).toLocaleDateString() %></p>
-        <h2><%= plant.plantName %></h2>
-      </div>
-      <% if (plant.plantPhoto) { %>
-        <img src="<%= plant.plantPhoto %>" width="200" height="200">
-      <% } %>
-    </a>
-   
-  <% }); %>
-</div>
+  <div class="plant-container">
+    <% plants.forEach((plant) => { %>
+      <a href="/plant/<%= encodeURIComponent(plant.plantName) %>" class="plant-box">
+        <div class="text-container">
+          <p>| <%= new Date(plant.dateTime).toLocaleDateString() %></p>
+          <h2><%= plant.plantName %></h2>
+        </div>
+        <% if (plant.plantPhoto) { %>
+          <img src="<%= plant.plantPhoto %>" width="200" height="200">
+        <% } %>
+      </a>
+    <% }); %>
+  </div>
 </body>
 </html>

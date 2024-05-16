@@ -45,6 +45,9 @@ let plantSchema = new Schema({
 
 });
 
+// Add the 2dsphere index to the location field
+plantSchema.index({ location: '2dsphere' });
+
 plantSchema.set('toObject', { getters: true, virtuals: true });
 
 let Plant = mongoose.model('Plant', plantSchema);

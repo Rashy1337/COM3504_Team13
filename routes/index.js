@@ -20,7 +20,6 @@ var storage = multer.diskStorage({
 let upload = multer({ storage: storage });
 
 /* GET home page. */
-/* GET home page. */
 router.get('/', function(req, res, next) {
     User.findOne({}) // Retrieve the first user from the database
         .then(user => {
@@ -28,13 +27,14 @@ router.get('/', function(req, res, next) {
                 // If the user hasn't been set, redirect to the set-username page
                 res.redirect('/set-username');
             } else {
-                // Retrieve all plants from the database
-                Plants.find({})
-                    .then(plants => {
-                        // Pass the user and plants objects to the view
-                        res.render('index', { title: 'Home', user: user, plants: plants });
-                    })
-                    .catch(err => next(err));
+                // Retrieve all plants from the database with sorting
+                // console.log('Sort value in routes:', req.query.sort);
+                let result = plants.getAll(req.query.sort, user.username);
+                result.then(plants => {
+                    // Pass the user and plants objects to the view
+                    res.render('index', { title: 'Plant Findr!', user: user, plants: plants });
+                })
+                .catch(err => next(err));
             }
         })
         .catch(err => next(err));

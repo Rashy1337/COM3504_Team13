@@ -2,6 +2,7 @@
 <html>
 <head>
     <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/setUser.css' />
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAhZ5Qt2ta-Pb71y5QViO2DPXuRVJmOFvI&callback=initMap"></script>
     <script>
         function initMap() {
@@ -59,12 +60,21 @@
     </script>
 </head>
 <body>
-<form action="/set-username" method="post">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required>
-    <div id="map" style="height: 400px;"></div>
-    <input type="hidden" id="location" name="location">
-    <input type="submit" value="Set Username">
-</form>
+    <div class="container">
+        <div class="card">
+            <p class="location-instruction">Please select your location on the map:</p>
+            <div class="card-image" id="map"></div>
+            <form class="card-form" action="/set-username" method="post">
+                <div class="input">
+                    <input type="text" class="input-field" id="username" name="username" required/>
+                    <label class="input-label">Username</label>
+                </div>
+                <input type="hidden" id="location" name="location">
+                <div class="action">
+                    <input type="submit" class="action-button" value="Set Username">
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

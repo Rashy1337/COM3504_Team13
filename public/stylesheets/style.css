@@ -1,5 +1,5 @@
 :root{
-  --background-color: #82DF6B;
+  --background-color: #83df6d;
 }
 
 body {
@@ -13,43 +13,7 @@ a {
   text-decoration: none;
 }
 
-.header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background: var(--background-color);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 0 1em;
-}
-
-.header p {
-  margin: 0;
-  font-size: 1.5em;
-  font-weight: bold;
-  color: #000000;
-}
-
-.nav {
-  display: flex;
-  align-items: center;
-  margin-left: 3em;
-}
-
-.nav a {
-  /* padding: 1em 1em; */
-  color: white;
-  font-weight: bold;
-  font-size: 1.5em;
-}
-
-.nav a:not(:last-child)::after {
-  content: "-";
-  margin: 0.5em;
-}
+/* Plant page */
 
 .heading{
   margin: 0;
@@ -68,10 +32,9 @@ a {
   overflow-y: scroll;
   scrollbar-width: thin;
   scrollbar-color: var(--background-color) #E4E4E7;
-  max-height: 75vh;
+  max-height: 80vh;
   overscroll-behavior-y: contain;
 }
-
 
 /* Style the scrollbar for Webkit browsers (Chrome, Safari) */
 .plant-container::-webkit-scrollbar {
@@ -174,4 +137,20 @@ input[type="submit"] {
 .characteristics {
   background-color: #AC9797;
   width: calc(15% - 1em);
+}
+
+.sort-btn {
+  background-color: #F8F8F8; /* Offwhite color */
+  border: 0.2vh solid var(--background-color);
+  border-radius: 0.5vh;
+  padding: 1vh 2vw;
+  margin: 0.5vh;
+  cursor: pointer;
+  box-shadow: 0.2vh 0.2vh 0.5vh rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+.sort-btn:hover {
+  background-color: var(--background-color);
+  color: #F8F8F8; /* Change the text color to offwhite on hover */
 }

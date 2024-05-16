@@ -34,7 +34,7 @@ exports.create = function(plantsData, filePath, username) {
         });
 };
 
-exports.getAll = function(sort) {
+exports.getAll = function(sort, username) {
     console.log('Sort value in controller:', sort);
     let sortOptions = {};
     switch (sort) {
@@ -48,12 +48,35 @@ exports.getAll = function(sort) {
             sortOptions.dateTime = 1;
             break;
         case 'location':
-            sortOptions.address = 1;
-            break;
+            // When sorting by location, we'll find the user and use their location as the center point
+            return User.findOne({ username: username })
+                .then(user => {
+                    if (!user) throw new Error('User not found');
+                    return plantsModel.aggregate([
+                        {
+                            $geoNear: {
+                                near: user.location,
+                                distanceField: "dist.calculated",
+                                maxDistance: 10000000,
+                                spherical: true
+                            }
+                        }
+                    ]).then(plants => {
+                        console.log(plants);
+                        return plants;
+                    }).catch(err => {
+                        console.log(err);
+                        return null;
+                    });
+                })
+                .catch(err => {
+                    console.error(err);
+                    // Handle error here, for example, render an error page
+                });
     }
     return plantsModel.find({}).sort(sortOptions).then(plants => {
-        // console.log(plants);
-        return JSON.stringify(plants);
+        console.log(plants);
+        return plants;
     }).catch(err => {
         console.log(err);
         return null;
@@ -63,7 +86,8 @@ exports.getAll = function(sort) {
 
 exports.getPlant = function(plantName) {
     // Capitalize first letter and make the rest lowercase for DBpedia query
-    let dbpediaPlantName = plantName.charAt(0).toUpperCase() + plantName.slice(1).toLowerCase();
+    let dbpediaPlantName = plantName.split(' ')[0];
+    dbpediaPlantName = dbpediaPlantName.charAt(0).toUpperCase() + dbpediaPlantName.slice(1).toLowerCase();
 
     return plantsModel.findOne({ plantName: plantName }).then(plant => {
         let plantObject = plant.toObject();
