@@ -1,22 +1,22 @@
-var express = require('express');
-var router = express.Router();
-var fs = require('fs');
-var path = require('path');
-var plants = require('../controllers/plantsController');
-var Plants = require('../models/plants');
-var User = require('../models/user');
-var multer = require('multer');
-var storage = multer.diskStorage({
+const express = require('express');
+const router = express.Router();
+const multer = require('multer');
+const plants = require('../controllers/plantsController');
+const Plants = require('../models/plants');
+const User = require('../models/user');
+
+const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'public/images/uploads/');
     },
     filename: function (req, file, cb) {
-        var original = file.originalname;
-        var file_extension = original.split(".");
-        filename =  Date.now() + '.' + file_extension[file_extension.length-1];
+        const original = file.originalname;
+        const file_extension = original.split(".");
+        const filename = Date.now() + '.' + file_extension[file_extension.length - 1];
         cb(null, filename);
     }
 });
+
 let upload = multer({ storage: storage });
 
 /* GET home page. */
@@ -27,14 +27,13 @@ router.get('/', function(req, res, next) {
                 // If the user hasn't been set, redirect to the set-username page
                 res.redirect('/set-username');
             } else {
-                // Retrieve all plants from the database with sorting
-                // console.log('Sort value in routes:', req.query.sort);
-                let result = plants.getAll(req.query.sort, user.username);
-                result.then(plants => {
-                    // Pass the user and plants objects to the view
-                    res.render('index', { title: 'Plant Findr!', user: user, plants: plants });
-                })
-                .catch(err => next(err));
+                // Retrieve all plants from the database
+                Plants.find({})
+                    .then(plants => {
+                        // Pass the user and plants objects to the view
+                        res.render('index', { title: 'Home', user: user, plants: plants });
+                    })
+                    .catch(err => next(err));
             }
         })
         .catch(err => next(err));
@@ -91,24 +90,45 @@ router.post('/upload', upload.single('plantPhoto'), async function(req, res, nex
     console.log(req.body); // Log the body of the request
     console.log(req.file); // Log the file object
     let plantsData = req.body;
-    let filePath = req.file.path;
-    filePath = filePath.replace('public', ''); // Convert local file path to URL path
+    let filePath = req.file ? req.file.path.replace('public', '') : null; // Convert local file path to URL path
     plantsData.plantPhoto = filePath;
 
-    let locationData = JSON.parse(req.body.location); // Parse location data
-    plantsData.location = {
-        type: 'Point',
-        coordinates: [locationData.lng, locationData.lat] // Use lng and lat values to create coordinates array
-    };
+    let locationData;
+    try {
+        locationData = JSON.parse(req.body.location); // Parse location data
+    } catch (err) {
+        console.error('Error parsing location data:', err);
+        locationData = null;
+    }
+
+    if (locationData) {
+        plantsData.location = {
+            type: 'Point',
+            coordinates: [locationData.lng, locationData.lat] // Use lng and lat values to create coordinates array
+        };
+    } else {
+        plantsData.location = {
+            type: 'Point',
+            coordinates: [0, 0] // Default coordinates in case of missing location data
+        };
+    }
 
     try {
         let results = await plants.create(plantsData, filePath, req.body.username); // Wait for the promise to resolve
         console.log(results);
-        res.redirect('/');
+        res.status(200).json({ message: 'Plant details saved successfully.', plant: results });
     } catch (error) {
         console.error(error);
-        // Handle error here, for example, render an error page
         res.status(500).send('Error occurred while uploading plant data');
+    }
+});
+
+router.get('/plants', async (req, res) => {
+    try {
+        const plants = await Plants.find({});
+        res.json(plants);
+    } catch (err) {
+        res.status(500).send(err);
     }
 });
 
