@@ -86,15 +86,40 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAhZ5Qt2ta-Pb71y5QViO2DPXu
         <label for="plantSize">Plant Size:</label><br>
         <input type="text" id="plantSize" name="plantSize"><br><br>
 
+        <label for="descriptions">Description:</label><br>
+        <input type="text" id="descriptions" name="descriptions"><br><br>
+
+        <label for="colour">Colour:</label><br>
+        <input type="text" id="colour" name="colour"><br><br>
+
         <label>Plant Characteristics:</label><br>
         <div class="characteristics">
-            <label class="bullet-circle"><input type="radio" name="plantCharacteristics" value="flower"> Flower</label><br>
-            <label class="bullet-circle"><input type="radio" name="plantCharacteristics" value="leaf"> Leaf</label><br>
-            <label class="bullet-circle"><input type="radio" name="plantCharacteristics" value="fruit"> Fruit or Seed</label><br>
+            <label class="checkbox"><input type="checkbox" name="hasFlower" value="Yes"> Does it have a flower?</label><br>
+            <label class="checkbox"><input type="checkbox" name="hasSeed" value="Yes"> Does it have a seed?</label><br>
+            <label class="checkbox"><input type="checkbox" name="isFruit" value="Yes"> Is it a fruit?</label><br>
         </div><br><br>
+
+        <label>Plant Identification:</label><br>
+        <div class="identification">
+            <label class="bullet-circle"><input type="radio" name="plantIdentification" value="Completed"> Completed</label><br>
+            <label class="bullet-circle"><input type="radio" name="plantIdentification" value="In-Progress"> In-Progress</label><br>
+        </div><br><br>
+
+
+        <label>Sun Exposure:</label><br>
+        <div class="sunExposure">
+            <label class="bullet-circle"><input type="radio" name="sunExposure" value="Full Sun"> Full Sun</label><br>
+            <label class="bullet-circle"><input type="radio" name="sunExposure" value="Partial Shade"> Partial Shade </label><br>
+            <label class="bullet-circle"><input type="radio" name="sunExposure" value="Full Shade"> Full Shade </label><br>
+        </div><br><br>
+
+
 
         <label for="plantPhoto">Plant Photo:</label><br>
         <input type="file" id="plantPhoto" name="plantPhoto"><br><br>
+
+        <label for="photoUrl">Or enter photo URL:</label><br>
+        <input type="url" id="photoUrl" name="photoUrl"><br><br>
 
         <label for="url">Enter URL:</label><br>
         <input type="url" id="url" name="url"><br><br>

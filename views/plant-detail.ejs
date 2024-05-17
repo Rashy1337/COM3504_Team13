@@ -33,12 +33,21 @@
     </div>
 
     <!-- Details container -->
+    <!-- Details container -->
     <div class="details">
-      <p class="short" data-label="Characteristics: "><%= plant.plantCharacteristics %></p>
-      <p data-label="Uploaded by: "><%= plant.username %></p>
+      <p class="short" data-label="Characteristics: ">
+        Flower: <%= plant.plantCharacteristics ? (plant.plantCharacteristics.hasFlower ? 'Yes' : 'No') : 'N/A' %>,
+        Seed: <%= plant.plantCharacteristics ? (plant.plantCharacteristics.hasSeed ? 'Yes' : 'No') : 'N/A' %>,
+        Fruit: <%= plant.plantCharacteristics ? (plant.plantCharacteristics.isFruit ? 'Yes' : 'No') : 'N/A' %>
+      </p>
+      <p class="short" data-label="Identification: "><%= plant.plantIdentification %></p>
+        <p class="short" data-label="Sun Exposure: "><%= plant.sunExposure %></p>
+      <p data-label="Uploaded by: "><%= plant.username %></p>s
       <p class="long" data-label="DBpedia: "><%= plant.description %></p>
       <p class="date" data-label="Time: "><%= plant.dateTime %></p>
       <p data-label="Size: "><%= plant.plantSize %></p>
+      <p data-label="Colour: "><%= plant.colour %></p>
+      <p data-label="Description: "><%= plant.descriptions %></p>
       <p data-label="Scientific Name: "><%= plant.taxon %></p>
       <p data-label="For more Info: "><a href="<%= plant.plantUri %>"><%= plant.plantUri %></a></p>
     </div>
