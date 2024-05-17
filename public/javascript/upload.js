@@ -12,41 +12,43 @@ document.addEventListener('DOMContentLoaded', () => {
         const address = form.address.value;
         const username = form.username.value;
 
-        let plantPhoto = null;
-        const fileInput = form.plantPhoto;
-        if (fileInput.files.length > 0) {
-            const file = fileInput.files[0];
-            const reader = new FileReader();
-            reader.onload = async function(event) {
-                plantPhoto = event.target.result;
-                const plant = {
-                    plantName,
-                    dateTime,
-                    plantSize,
-                    plantCharacteristics,
-                    location,
-                    url,
-                    address,
-                    username,
-                    plantPhoto
-                };
-                await handlePlantSubmission(plant, file);
-            };
-            reader.readAsDataURL(file);
-        } else {
-            const plant = {
-                plantName,
-                dateTime,
-                plantSize,
-                plantCharacteristics,
-                location,
-                url,
-                address,
-                username,
-                plantPhoto
-            };
-            await handlePlantSubmission(plant);
-        }
+        // let plantPhoto = null;
+        // const fileInput = form.plantPhoto;
+        // if (fileInput.files.length > 0) {
+        //     const file = fileInput.files[0];
+        //     const reader = new FileReader();
+        //     reader.onload = async function(event) {
+        //         plantPhoto = event.target.result;
+        const plant = {
+            plantName,
+            dateTime,
+            plantSize,
+            plantCharacteristics,
+            location,
+            url,
+            address,
+            username,
+            // plantPhoto
+        };
+        console.log('Plant (without photo):', plant);
+        await handlePlantSubmission(plant);
+        //     };
+        //     reader.readAsDataURL(file);
+        // } else {
+        //     const plant = {
+        //         plantName,
+        //         dateTime,
+        //         plantSize,
+        //         plantCharacteristics,
+        //         location,
+        //         url,
+        //         address,
+        //         username,
+        //         plantPhoto
+        //     };
+        //     console.log('Plant (without photo):', plant);
+        //     await handlePlantSubmission(plant);
+        // }
     });
 });
 
@@ -62,9 +64,10 @@ async function handlePlantSubmission(plant, file = null) {
             formData.append('url', plant.url);
             formData.append('address', plant.address);
             formData.append('username', plant.username);
-            if (file) {
-                formData.append('plantPhoto', file);
-            }
+            // if (file) {
+            //     formData.append('plantPhoto', file, file.name);
+            // }
+            console.log('Form data:', formData);
 
             const response = await fetch('/upload', {
                 method: 'POST',
@@ -83,7 +86,7 @@ async function handlePlantSubmission(plant, file = null) {
         }
     } else {
         try {
-            await addItem(plant);
+            await addItem(plant, file);  // Modify this function to store the file object in IndexedDB
             alert('Plant details saved locally.');
             window.location.href = '/';  // Redirect after saving
         } catch (error) {

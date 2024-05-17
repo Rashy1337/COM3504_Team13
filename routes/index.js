@@ -28,7 +28,8 @@ router.get('/', function(req, res, next) {
                 res.redirect('/set-username');
             } else {
                 // Retrieve all plants from the database
-                Plants.find({})
+                const sort = req.query.sort; // Get sort parameter from request query
+                plants.getAll(sort, user.username) // Use getAll function from controller
                     .then(plants => {
                         // Pass the user and plants objects to the view
                         res.render('index', { title: 'Home', user: user, plants: plants });
