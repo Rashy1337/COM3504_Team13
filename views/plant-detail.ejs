@@ -9,13 +9,37 @@
 </head>
 <body>
   <%- include('partials/_header') %>
-  <div class="details-container card">
+  <div class="details-container">
 
-    <div class="image-map-container">
-      <img class="plant-photo" src="<%= plant.plantPhoto %>" alt="Plant Photo">
-      <div id="map" style="height: 400px;"></div>
+    <div class="details-map">
+      <div class="image-details-container">
+        <div class="image-name-container">
+          <img class="plant-photo" src="<%= plant.plantPhoto %>" alt="Plant Photo">
+          <div class="plant-info">
+            <h1 class="plant-name"><%= plant.plantName %></h1>
+            <div class="plant-characteristics">
+              <object data="<%= plant.plantCharacteristics.hasFlower ? '/SVG/flower-green.svg' : '/SVG/flower.svg' %>" type="image/svg+xml" title="Flower: <%= plant.plantCharacteristics.hasFlower ? 'Yes' : 'No' %>">flower</object>
+              <object data="<%= plant.plantCharacteristics.hasSeed ? '/SVG/seed-green.svg' : '/SVG/seed.svg' %>" type="image/svg+xml" title="Seed: <%= plant.plantCharacteristics.hasSeed ? 'Yes' : 'No' %>">seed</object>
+              <object data="<%= plant.plantCharacteristics.isFruit ? '/SVG/fruit-green.svg' : '/SVG/fruit.svg' %>" type="image/svg+xml" title="Fruit: <%= plant.plantCharacteristics.isFruit ? 'Yes' : 'No' %>">fruit</object>
+            </div>
+          </div>
+        </div>
+        <div class="details">
+          <p data-label="Identification: "><%= plant.plantIdentification %></p>
+            <p data-label="Sun Exposure: "><%= plant.sunExposure %></p>
+          <p data-label="Uploaded by: "><%= plant.username %></p>
+          <p data-label="DBpedia: "><%= plant.description %></p>
+          <p data-label="Time: "><%= plant.dateTime %></p>
+          <p data-label="Size: "><%= plant.plantSize %></p>
+          <p data-label="Colour: "><%= plant.colour %></p>
+          <p data-label="Description: "><%= plant.descriptions %></p>
+          <p data-label="Scientific Name: "><%= plant.taxon %></p>
+          <p data-label="For more Info: "><a href="<%= plant.plantUri %>"><%= plant.plantUri %></a></p>
+        </div>
+      </div>
+      <div id="map" style="height: 30vh;"></div>
     </div>
-    <h1><%= plant.plantName %></h1>
+
 
     <!-- Chat container -->
     <div class="chat-container">
@@ -31,28 +55,9 @@
         <button type="button">Send</button>
       </div>
     </div>
-
-    <!-- Details container -->
-    <!-- Details container -->
-    <div class="details">
-      <p class="short" data-label="Characteristics: ">
-        Flower: <%= plant.plantCharacteristics ? (plant.plantCharacteristics.hasFlower ? 'Yes' : 'No') : 'N/A' %>,
-        Seed: <%= plant.plantCharacteristics ? (plant.plantCharacteristics.hasSeed ? 'Yes' : 'No') : 'N/A' %>,
-        Fruit: <%= plant.plantCharacteristics ? (plant.plantCharacteristics.isFruit ? 'Yes' : 'No') : 'N/A' %>
-      </p>
-      <p class="short" data-label="Identification: "><%= plant.plantIdentification %></p>
-        <p class="short" data-label="Sun Exposure: "><%= plant.sunExposure %></p>
-      <p data-label="Uploaded by: "><%= plant.username %></p>s
-      <p class="long" data-label="DBpedia: "><%= plant.description %></p>
-      <p class="date" data-label="Time: "><%= plant.dateTime %></p>
-      <p data-label="Size: "><%= plant.plantSize %></p>
-      <p data-label="Colour: "><%= plant.colour %></p>
-      <p data-label="Description: "><%= plant.descriptions %></p>
-      <p data-label="Scientific Name: "><%= plant.taxon %></p>
-      <p data-label="For more Info: "><a href="<%= plant.plantUri %>"><%= plant.plantUri %></a></p>
-    </div>
-    
   </div>
+
+
   <script>
     function initMap() {
       var plantLocation = JSON.parse('<%- JSON.stringify(plant.location) %>');
