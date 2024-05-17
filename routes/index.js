@@ -89,9 +89,18 @@ router.get('/upload', function(req, res, next) {
 
 router.post('/upload', upload.single('plantPhoto'), async function(req, res, next) {
     console.log(req.body); // Log the body of the request
-    console.log(req.file); // Log the file object
+    console.log(req.file); // Log the file object if uploaded
     let plantsData = req.body;
-    let filePath = req.file ? req.file.path.replace('public', '') : null; // Convert local file path to URL path
+    let filePath;
+
+    if (req.file) {
+        filePath = req.file.path.replace('public', ''); // Convert local file path to URL path if file is uploaded
+    } else if (req.body.photoUrl) {
+        filePath = req.body.photoUrl; // Use the URL provided in the form if no file is uploaded
+    } else {
+        // Handle case where neither a file is uploaded nor a URL is provided
+        return res.status(400).send('No image provided');
+    }
     plantsData.plantPhoto = filePath;
 
     let locationData;

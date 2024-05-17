@@ -16,47 +16,8 @@
     <script src="/javascript/idb-utility.js"></script>
     <script src="/javascript/upload.js" defer></script>
 </head>
-<body>
-<%- include('partials/_header') %>
-<h1>Fill Plant Details</h1>
 
-<div class="heading">
-    <form id="plantForm" enctype="multipart/form-data">
-        <label for="plantName">Plant Name:</label><br>
-        <input type="text" id="plantName" name="plantName" required><br><br>
-
-        <label for="dateTime">Date and Time:</label><br>
-        <input type="datetime-local" id="dateTime" name="dateTime" required><br><br>
-
-        <label for="plantSize">Plant Size:</label><br>
-        <input type="text" id="plantSize" name="plantSize" required><br><br>
-
-        <label>Plant Characteristics:</label><br>
-        <div class="characteristics">
-            <label class="bullet-circle"><input type="radio" name="plantCharacteristics" value="flower" required> Flower</label><br>
-            <label class="bullet-circle"><input type="radio" name="plantCharacteristics" value="leaf"> Leaf</label><br>
-            <label class="bullet-circle"><input type="radio" name="plantCharacteristics" value="fruit"> Fruit or Seed</label><br>
-        </div><br><br>
-
-        <label for="plantPhoto">Plant Photo:</label><br>
-        <input type="file" id="plantPhoto" name="plantPhoto"><br><br>
-
-        <label for="url">Enter URL:</label><br>
-        <input type="url" id="url" name="url"><br><br>
-
-        <input type="hidden" id="location" name="location">
-        <br><br>
-
-        <div id="map"></div>
-
-        <label for="address">Address:</label><br>
-        <input type="text" id="address" name="address"><br><br>
-        <input type="hidden" id="username" name="username" value="<%= user.username %>">
-        <input type="submit" value="Upload">
-    </form>
-    <a href="/">Go back to the root page</a>
-</div>
-
+<!-- scripting -->
 <script>
     function initMap() {
         var map = new google.maps.Map(document.getElementById('map'), {
@@ -111,5 +72,72 @@
 </script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAhZ5Qt2ta-Pb71y5QViO2DPXuRVJmOFvI&callback=initMap">
 </script>
+
+<body>
+    <%- include('partials/_header') %>
+<h1>Fill Plant Details</h1>
+
+<div class="heading">
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <label for="plantName">Plant Name:</label><br>
+        <input type="text" id="plantName" name="plantName"><br><br>
+
+        <label for="dateTime">Date and Time:</label><br>
+        <input type="datetime-local" id="dateTime" name="dateTime"><br><br>
+
+        <label for="plantSize">Plant Size:</label><br>
+        <input type="text" id="plantSize" name="plantSize"><br><br>
+
+        <label for="descriptions">Description:</label><br>
+        <input type="text" id="descriptions" name="descriptions"><br><br>
+
+        <label for="colour">Colour:</label><br>
+        <input type="text" id="colour" name="colour"><br><br>
+
+        <label>Plant Characteristics:</label><br>
+        <div class="characteristics">
+            <label class="checkbox"><input type="checkbox" name="hasFlower" value="Yes"> Does it have a flower?</label><br>
+            <label class="checkbox"><input type="checkbox" name="hasSeed" value="Yes"> Does it have a seed?</label><br>
+            <label class="checkbox"><input type="checkbox" name="isFruit" value="Yes"> Is it a fruit?</label><br>
+        </div><br><br>
+
+        <label>Plant Identification:</label><br>
+        <div class="identification">
+            <label class="bullet-circle"><input type="radio" name="plantIdentification" value="Completed"> Completed</label><br>
+            <label class="bullet-circle"><input type="radio" name="plantIdentification" value="In-Progress"> In-Progress</label><br>
+        </div><br><br>
+
+
+        <label>Sun Exposure:</label><br>
+        <div class="sunExposure">
+            <label class="bullet-circle"><input type="radio" name="sunExposure" value="Full Sun"> Full Sun</label><br>
+            <label class="bullet-circle"><input type="radio" name="sunExposure" value="Partial Shade"> Partial Shade </label><br>
+            <label class="bullet-circle"><input type="radio" name="sunExposure" value="Full Shade"> Full Shade </label><br>
+        </div><br><br>
+
+
+
+        <label for="plantPhoto">Plant Photo:</label><br>
+        <input type="file" id="plantPhoto" name="plantPhoto"><br><br>
+
+        <label for="photoUrl">Or enter photo URL:</label><br>
+        <input type="url" id="photoUrl" name="photoUrl"><br><br>
+
+        <label for="url">Enter URL:</label><br>
+        <input type="url" id="url" name="url"><br><br>
+
+        <input type="hidden" id="location" name="location">
+        <br><br>
+
+        <div id="map" style="height: 400px;"></div>
+
+        <label for="address">Address:</label><br>
+        <input type="text" id="address" name="address"><br><br>
+        <input type="hidden" id="username" name="username" value="<%= user.username %>">
+        <input type="submit" value="Upload">
+        </form>
+        <a href="/">Go back to the root page</a>
+    </form>
+</div>
 </body>
 </html>

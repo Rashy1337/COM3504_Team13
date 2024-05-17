@@ -11,9 +11,15 @@ exports.create = function(plantsData, filePath, username) {
                 plantName: plantsData.plantName,
                 dateTime: plantsData.dateTime,
                 plantSize: plantsData.plantSize,
-                plantCharacteristics: plantsData.plantCharacteristics,
+                plantCharacteristics: {
+                    hasFlower: plantsData.hasFlower === 'Yes',
+                    hasSeed: plantsData.hasSeed === 'Yes',
+                    isFruit: plantsData.isFruit === 'Yes',},
+                plantIdentification: plantsData.plantIdentification,
+                sunExposure: plantsData.sunExposure,
+                colour: plantsData.colour,
+                descriptions: plantsData.descriptions,
                 plantPhoto: filePath, // Use filePath from arguments
-                url: plantsData.url,
                 address: plantsData.address,
                 location: plantsData.location,
                 username: user.username

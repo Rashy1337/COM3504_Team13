@@ -15,12 +15,23 @@ let plantSchema = new Schema({
         type: String,
     },
     plantCharacteristics: {
+        hasFlower: Boolean,
+        hasSeed: Boolean,
+        isFruit: Boolean,
+    },
+    plantIdentification: {
+        type: String,
+    },
+    sunExposure: {
+        type: String,
+    },
+    descriptions: {
+        type: String,
+    },
+    colour: {
         type: String,
     },
     plantPhoto: {
-        type: String,
-    },
-    url: {
         type: String,
     },
     address: {
