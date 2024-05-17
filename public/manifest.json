@@ -1,0 +1,17 @@
+{
+  "lang": "en-uk",
+  "name": "Plant App",
+  "short_name": "Plant App",
+  "description": "A basic application that fetches plant data",
+  "start_url": "/",
+  "background_color": "#2f3d58",
+  "theme_color": "#2f3d58",
+  "orientation": "any",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "/images/image_icon.png",
+      "sizes": "512x512"
+    }
+  ]
+}
