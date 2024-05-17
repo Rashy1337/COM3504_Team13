@@ -126,7 +126,7 @@ router.post('/upload', upload.single('plantPhoto'), async function(req, res, nex
     try {
         let results = await plants.create(plantsData, filePath, req.body.username); // Wait for the promise to resolve
         console.log(results);
-        res.status(200).json({ message: 'Plant details saved successfully.', plant: results });
+        res.redirect('/');
     } catch (error) {
         console.error(error);
         res.status(500).send('Error occurred while uploading plant data');
