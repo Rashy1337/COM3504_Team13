@@ -5,7 +5,8 @@
   <link rel='stylesheet' href='/stylesheets/style.css' />
   <link rel='stylesheet' href='/stylesheets/details.css' />
   <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-  <script src="/javascripts/chat.js"></script>
+  <script src="https://unpkg.com/idb@5.0.4/build/iife/index-min.js"></script>
+  <script src="/javascripts/chat.js" defer></script>
 </head>
 <body>
   <%- include('partials/_header') %>
@@ -42,7 +43,7 @@
       <p data-label="Scientific Name: "><%= plant.taxon %></p>
       <p data-label="For more Info: "><a href="<%= plant.plantUri %>"><%= plant.plantUri %></a></p>
     </div>
-    
+
   </div>
   <script>
     function initMap() {

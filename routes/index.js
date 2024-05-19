@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const plants = require('../controllers/plantsController');
+const Chat = require('../models/chat');
 const Plants = require('../models/plants');
 const User = require('../models/user');
 
@@ -130,6 +131,17 @@ router.get('/plants', async (req, res) => {
         res.json(plants);
     } catch (err) {
         res.status(500).send(err);
+    }
+});
+
+router.post('/sync-chat', async (req, res) => {
+    try {
+        const chatMessage = new Chat(req.body);
+        await chatMessage.save();
+        res.status(200).send('Chat message synced successfully');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error syncing chat message');
     }
 });
 
