@@ -27,7 +27,7 @@ exports.create = function(plantsData, base64Image, username) {
             });
 
             return plant.save().then(plant => {
-                console.log(plant);
+                // console.log(plant);
                 return JSON.stringify(plant);
             }).catch((err) => {
                 console.log(err);
@@ -41,7 +41,7 @@ exports.create = function(plantsData, base64Image, username) {
 
 
 exports.getAll = function(sort, username) {
-    console.log('Sort value in controller:', sort);
+    // console.log('Sort value in controller:', sort);
     let sortOptions = {};
     switch (sort) {
         case 'name-asc':
@@ -68,7 +68,7 @@ exports.getAll = function(sort, username) {
                             }
                         }
                     ]).then(plants => {
-                        console.log(plants);
+                        // console.log(plants);
                         return plants;
                     }).catch(err => {
                         console.log(err);
@@ -81,7 +81,7 @@ exports.getAll = function(sort, username) {
                 });
     }
     return plantsModel.find({}).sort(sortOptions).then(plants => {
-        console.log(plants);
+        // console.log(plants);
         return plants;
     }).catch(err => {
         console.log(err);

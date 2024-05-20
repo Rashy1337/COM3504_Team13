@@ -3,7 +3,6 @@
 <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/setUser.css' />
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAhZ5Qt2ta-Pb71y5QViO2DPXuRVJmOFvI&callback=initMap"></script>
     <script>
         function initMap() {
             var map = new google.maps.Map(document.getElementById('map'), {
@@ -58,6 +57,7 @@
                 'Error: Your browser doesn\'t support geolocation.');
         }
     </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAhZ5Qt2ta-Pb71y5QViO2DPXuRVJmOFvI&callback=initMap"></script>
 </head>
 <body>
     <div class="container">
@@ -75,6 +75,8 @@
                 </div>
             </form>
         </div>
-    </div>
+    </div> 
+    <script>
+    </script>
 </body>
 </html>

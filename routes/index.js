@@ -7,12 +7,14 @@ const axios = require('axios');
 const Plants = require('../models/plants');
 const User = require('../models/user');
 
+var globals = require('./globals');
+
 const storage = multer.memoryStorage();
 let upload = multer({ storage: storage });
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    User.findOne({}) // Retrieve the first user from the database
+    User.findOne({username: globals.currentUser}) // Retrieve the first user from the database
         .then(user => {
             if (!user) {
                 // If the user hasn't been set, redirect to the set-username page
@@ -38,17 +40,29 @@ router.get('/set-username', function(req, res, next) {
 router.post('/set-username', function(req, res, next) {
     console.log(req.body); // Log the body of the request
     let location = JSON.parse(req.body.location);
-    let user = new User({
-        username: req.body.username,
-        location: {
-            type: 'Point',
-            coordinates: [location.lng, location.lat]
-        }
-    });
-    user.save()
+    User.findOne({ username: req.body.username })
+        .then(existingUser => {
+            if (existingUser) {
+                existingUser.location = {
+                    type: 'Point',
+                    coordinates: [location.lng, location.lat]
+                };
+                return existingUser.save();
+            } else {
+                let user = new User({
+                    username: req.body.username,
+                    location: {
+                        type: 'Point',
+                        coordinates: [location.lng, location.lat]
+                    }
+                });
+                return user.save();
+            }
+        })
         .then(() => {
             console.log('User saved successfully'); // Log success message
-            res.redirect('/')
+            globals.currentUser = req.body.username;
+            res.redirect('/');
         })
         .catch(err => {
             console.log('Error saving user:', err); // Log error message
@@ -57,8 +71,9 @@ router.post('/set-username', function(req, res, next) {
 });
 
 router.post('/change-username', function(req, res, next) {
-    User.findOneAndUpdate({}, { username: req.body.newUsername }) // Update the first user in the database
+    User.findOneAndUpdate({username: globals.currentUser}, { username: req.body.newUsername }) // Update the first user in the database
         .then(() => {
+            globals.currentUser = req.body.newUsername; // Update the current username
             res.redirect('/');
         })
         .catch(err => next(err));
@@ -66,7 +81,7 @@ router.post('/change-username', function(req, res, next) {
 
 /* GET upload page. */
 router.get('/upload', function(req, res, next) {
-    User.findOne({}) // Retrieve the first user from the database
+    User.findOne({username: globals.currentUser})
         .then(user => {
             if (!user) {
                 // If the username hasn't been set, redirect to the set-username page
