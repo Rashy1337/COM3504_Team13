@@ -32,4 +32,24 @@ router.get('/:plantName', async function(req, res, next) {
       }
 });
 
+
+router.post('/updateName/:id', async (req, res) => {
+  try {
+    const plantID = req.params.id;
+    const newName = req.body.newName;
+    const username = globals.currentUser;
+
+    const result = await plants.updatePlantName(plantID, newName);
+    if (result) {
+      // redirect user to new plant page
+      res.json({ success: true });
+    } else {
+      res.json({ success: false });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false });
+  }
+});
+
 module.exports = router;

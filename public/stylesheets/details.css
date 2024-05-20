@@ -33,7 +33,7 @@ body {
     align-items: flex-start;
     width: 100%;
     flex-wrap: wrap;
-    z-index: -1;
+    /* z-index: -1; Removed this line to fix click issue */
 }
 
 .details {
@@ -110,11 +110,10 @@ body {
     display: block;
 }
 
-
-
 .image-name-container {
     position: relative;
     width: 30%;
+    min-width: 20vw;
     height: 30vw;
 }
 
@@ -123,6 +122,7 @@ body {
     height: 100%;
     border-top-left-radius: 20px;
     object-fit: cover;
+    z-index: -1;
 }
 
 .plant-info {
@@ -137,10 +137,20 @@ body {
 
 .plant-name {
     margin-top: auto;
-    font-size: 5em;
+    font-size: 4em;
     color: var(--title-color);
+    position: relative; /* Added this to handle the button */
+    z-index: 2; /* Ensure the name is above other elements */
 }
-  
+
+#editNameButton {
+    /* background: none;
+    border: none; */
+    cursor: pointer;
+    margin-left: 1em;
+    vertical-align: middle;
+    z-index: 2; /* Ensure the button is above other elements */
+}
 
 .plant-characteristics {
     background-color: #7777776c;
@@ -151,7 +161,7 @@ body {
     top: 0;
     right: 0;
     padding: 1em;
-
+    z-index: 1; /* Ensure characteristics are on top */
 }
 
 .plant-characteristics object {
@@ -159,17 +169,14 @@ body {
     height: auto;
 }
 
-
 #map {
     width: 53vw; /* doesnt work, fix later */
     flex-grow: 1;
     border: none;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
-
+    z-index: 0; /* Ensure map is behind other elements */
 }
-
-
 
 /* chat  */
 .chat-container {

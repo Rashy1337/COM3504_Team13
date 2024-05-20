@@ -39,6 +39,25 @@ exports.create = function(plantsData, base64Image, username) {
         });
 };
 
+// update plant name
+exports.updatePlantName = async function(plantID, newName) {
+    try {
+        const plant = await plantsModel.findById(plantID);
+        if (!plant) {
+            throw new Error('Plant not found');
+        }
+
+        plant.plantName = newName;
+        await plant.save();
+
+        return true;
+    } catch (err) {
+        console.error(err);
+        return false;
+    }
+};
+
+
 
 exports.getAll = function(sort, username) {
     // console.log('Sort value in controller:', sort);
