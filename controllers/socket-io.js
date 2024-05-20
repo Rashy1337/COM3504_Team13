@@ -8,8 +8,8 @@ exports.init = function(io) {
       socket.emit('chat history', messages);
     });
 
-    socket.on('chat message', async function({ plantID, message }) {
-      const chatMessage = new Chat({ plantID, message, timestamp: new Date() });
+    socket.on('chat message', async function({ plantID, username, message }) {
+      const chatMessage = new Chat({ plantID, username, message, timestamp: new Date() });
       await chatMessage.save();
       io.to(plantID).emit('chat message', chatMessage);
     });

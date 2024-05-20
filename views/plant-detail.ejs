@@ -45,16 +45,15 @@
         <h4>Chat</h4>
       </div>
       <div id="chat-messages" class="chat-messages">
-        <!-- Messages will be added here -->
       </div>
       <div class="chat-input">
         <input type="hidden" id="plantID" value="<%= plant._id %>">
+        <input type="hidden" id="username" value="<%= user.username %>"> <!-- Add this line -->
         <input type="text" id="chat_input" placeholder="Type a message...">
         <button type="button">Send</button>
       </div>
     </div>
   </div>
-
 
   <script>
     function initMap() {

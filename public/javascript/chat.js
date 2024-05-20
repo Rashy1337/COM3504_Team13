@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", (event) => {
     const socket = io();
     const plantID = document.getElementById('plantID').value;
+    const username = document.getElementById('username').value;
 
     const input = document.getElementById('chat_input');
     const messages = document.getElementById('chat-messages');
@@ -20,6 +21,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         if (input.value) {
             const chatMessage = {
                 plantID,
+                username,
                 message: input.value,
                 timestamp: new Date()
             };
@@ -46,7 +48,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         messages.innerHTML = '';
         msgs.forEach((msg) => {
             const item = document.createElement('li');
-            item.textContent = `${formatDate(msg.timestamp)} - ${msg.message}`;
+            item.textContent = `${formatDate(msg.timestamp)} (${msg.username}) - ${msg.message}`;
             messages.appendChild(item);
         });
         window.scrollTo(0, document.body.scrollHeight);
@@ -54,7 +56,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     socket.on('chat message', (msg) => {
         const item = document.createElement('li');
-        item.textContent = `${formatDate(msg.timestamp)} - ${msg.message}`;
+        item.textContent = `${formatDate(msg.timestamp)} (${msg.username}) - ${msg.message}`;
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
     });

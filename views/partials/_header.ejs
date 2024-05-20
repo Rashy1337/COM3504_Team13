@@ -1,9 +1,11 @@
 <link rel='stylesheet' href='/stylesheets/header.css' />
 <div class="header">
-    <p>Plant<br>Findr</p>
-    <div class="nav">
-        <a href="/">Home</a>
-        <a href="/upload">Upload</a>
+    <div class="header-left">
+        <p>Plant<br>Findr</p>
+        <div class="nav">
+            <a href="/">Home</a>
+            <a href="/upload">Upload</a>
+        </div>
     </div>
     <div class="user">
         <div class="username-display">
@@ -12,7 +14,7 @@
         <form action="/change-username" method="POST" class="change-username-form">
             <input type="hidden" name="oldUsername" value="<%= user.username %>">
             <input type="text" name="newUsername" placeholder="New Username" required>
-            <button type="submit">Change Username</button>
+            <button type="submit" class="submit-btn">Change Username</button>
         </form>
         <button id="logout-button">Logout</button>
     </div>
