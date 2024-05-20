@@ -38,11 +38,13 @@ npm start
 
 or start the program from the `/bin/www`
 
+our github link: 
+https://github.com/Rashy1337/COM3504_Team13
 
 
+use the port `localhost:3003`
 
-
-
-
+youtube video link of demo: 
+https://youtu.be/32xbfrnaJUU
 
 <!-- #idb new (remember to ref) -->
