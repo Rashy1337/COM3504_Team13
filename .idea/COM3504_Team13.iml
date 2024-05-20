@@ -10,5 +10,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="COM3504_Assignment" />
+    <orderEntry type="module" module-name="ProgressiveApp" />
   </component>
 </module>

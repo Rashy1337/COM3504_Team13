@@ -8,10 +8,20 @@ exports.init = function(io) {
       socket.emit('chat history', messages);
     });
 
-    socket.on('chat message', async function({ plantID, msg }) {
-      const chatMessage = new Chat({ plantID, message: msg, timestamp: new Date() });
+    socket.on('chat message', async function({ plantID, message }) {
+      const chatMessage = new Chat({ plantID, message, timestamp: new Date() });
       await chatMessage.save();
       io.to(plantID).emit('chat message', chatMessage);
     });
+
+    socket.on('sync chat', async function(chat) {
+      const chatMessage = new Chat(chat);
+      await chatMessage.save();
+      io.to(chat.plantID).emit('chat message', chatMessage);
+    });
+
+    socket.on('disconnect', async () => {
+      // Handle any cleanup or disconnection logic here
+    });
   });
-}
+};

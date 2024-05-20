@@ -16,9 +16,26 @@ document.addEventListener("DOMContentLoaded", (event) => {
         return `${hours}:${minutes} ${day}/${month}/${year}`;
     }
 
-    function sendChatText() {
+    async function sendChatText() {
         if (input.value) {
-            socket.emit('chat message', { plantID, msg: input.value });
+            const chatMessage = {
+                plantID,
+                message: input.value,
+                timestamp: new Date()
+            };
+
+            if (navigator.onLine) {
+                socket.emit('chat message', chatMessage);
+            } else {
+                const db = await openDB();
+                const tx = db.transaction('chats', 'readwrite');
+                tx.objectStore('chats').add(chatMessage);
+                await tx.done;
+                await navigator.serviceWorker.ready.then(registration => {
+                    return registration.sync.register('sync-chats');
+                });
+            }
+
             input.value = '';
         }
     }
@@ -44,3 +61,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     socket.emit('join room', plantID);
 });
+
+async function openDB() {
+    return idb.openDB('PlantFindrDB', 1, {
+        upgrade(db) {
+            if (!db.objectStoreNames.contains('chats')) {
+                db.createObjectStore('chats', { keyPath: 'id', autoIncrement: true });
+            }
+        }
+    });
+}
