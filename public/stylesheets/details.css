@@ -21,11 +21,11 @@ body {
     flex-direction: column;
 }
 
-/* .details-container p {
+.details-container p {
     color: var(--text-color);
-    font-size: 0.875em;
-    margin: 0.9em 0;
-} */
+    font-size: 0.5vw;
+    margin: 0.5vw 0;
+}
 
 .image-details-container {
     display: flex;
@@ -51,7 +51,7 @@ body {
     align-items: start; /* align to the top */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-top-right-radius: 20px;
-    padding-left: 1em;
+    padding-left: 1.1vw;
 }
 
 .details p[data-label="Identification: "] {
@@ -96,12 +96,12 @@ body {
     grid-area: moreInfo;
 }
 
-.details p {
+ .details p {
     margin: 0;
     grid-column: span 2;
     padding: 0.5em;
     margin: 0.5em 0;
-}
+} 
 
 .details p::before {
     content: attr(data-label);
@@ -122,7 +122,7 @@ body {
     height: 100%;
     border-top-left-radius: 20px;
     object-fit: cover;
-    z-index: -1;
+    z-index: -100;
 }
 
 .plant-info {
@@ -137,19 +137,19 @@ body {
 
 .plant-name {
     margin-top: auto;
-    font-size: 4em;
+    font-size: 4vh;
     color: var(--title-color);
-    position: relative; /* Added this to handle the button */
-    z-index: 2; /* Ensure the name is above other elements */
+    position: relative; 
+    z-index: 2;
 }
 
 #editNameButton {
     /* background: none;
     border: none; */
     cursor: pointer;
-    margin-left: 1em;
+    margin-left: 1vh;
     vertical-align: middle;
-    z-index: 2; /* Ensure the button is above other elements */
+    z-index: 2;
 }
 
 .plant-characteristics {
@@ -161,7 +161,7 @@ body {
     top: 0;
     right: 0;
     padding: 1em;
-    z-index: 1; /* Ensure characteristics are on top */
+    z-index: 1;
 }
 
 .plant-characteristics object {
@@ -170,12 +170,12 @@ body {
 }
 
 #map {
-    width: 53vw; /* doesnt work, fix later */
+    width: 53vw;
     flex-grow: 1;
     border: none;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
-    z-index: 0; /* Ensure map is behind other elements */
+    z-index: 0;
 }
 
 /* chat  */
@@ -190,15 +190,15 @@ body {
     box-shadow: 0 0 1em rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    animation: slide-in 0.5s ease-out forwards; /* Change animation name */
+    animation: slide-in 0.5s ease-out forwards;
 }
 
 @keyframes slide-in {
     0% {
-        transform: translateY(100%); /* Start from the bottom */
+        transform: translateY(100%);
     }
     100% {
-        transform: translateY(0); /* End at the current position */
+        transform: translateY(0);
     }
 }
 .chat-header {
