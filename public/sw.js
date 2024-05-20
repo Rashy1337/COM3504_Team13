@@ -5,6 +5,7 @@ const DB_NAME = 'PlantFindrDB';
 const PLANT_STORE_NAME = 'plants';
 const CHAT_STORE_NAME = 'chats';
 const CHAT_SYNC_TAG = 'sync-chats';
+const PLANT_SYNC_TAG = 'sync-plants';
 
 self.addEventListener('install', event => {
     console.log('Service Worker: Installing....');
@@ -62,7 +63,7 @@ self.addEventListener('fetch', event => {
 });
 
 self.addEventListener('sync', event => {
-    if (event.tag === 'sync-plants') {
+    if (event.tag === PLANT_SYNC_TAG) {
         event.waitUntil(syncPlants());
     } else if (event.tag === CHAT_SYNC_TAG) {
         event.waitUntil(syncChatMessages());
@@ -128,19 +129,18 @@ async function sendPlantToServer(plant) {
 }
 
 async function sendChatMessageToServer(chat) {
-    const response = await fetch('/sync-chat', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(chat)
-    });
-
-    if (!response.ok) {
-        throw new Error('Network response was not ok');
+    try {
+        const response = await fetch('/sync-chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(chat)
+        });
+        return response.json();
+    } catch (err) {
+        console.error('Error sending chat message to server:', err);
     }
-
-    return response.json();
 }
 
 async function deleteSyncPlantFromIDB(id) {
@@ -156,3 +156,22 @@ async function deleteChatMessageFromIDB(id) {
     tx.objectStore(CHAT_STORE_NAME).delete(id);
     await tx.done;
 }
+
+// Handle notification click
+self.addEventListener('notificationclick', function(event) {
+    event.notification.close();
+
+    event.waitUntil(
+        clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clientList => {
+            for (let i = 0; i < clientList.length; i++) {
+                let client = clientList[i];
+                if (client.url === '/' && 'focus' in client) {
+                    return client.focus();
+                }
+            }
+            if (clients.openWindow) {
+                return clients.openWindow('/');
+            }
+        })
+    );
+});

@@ -94,9 +94,6 @@ router.get('/upload', function(req, res, next) {
 });
 
 router.post('/upload', upload.single('plantPhoto'), async function(req, res, next) {
-    // console.log(req.body); // Log the body of the request
-    // console.log(req.file); // Log the file object if uploaded
-
     let plantsData = req.body;
     let fileBuffer;
 
