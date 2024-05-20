@@ -2,11 +2,14 @@ const plantsModel = require('../models/plants');
 var User = require('../models/user');
 const axios = require('axios');
 
+// Function to create a new plant entry
 exports.create = function(plantsData, base64Image, username) {
+    // Find the user by username
     return User.findOne({ username: username })
         .then(user => {
             if (!user) throw new Error('User not found');
 
+            // Create a new plant object with provided data
             let plant = new plantsModel({
                 plantName: plantsData.plantName,
                 dateTime: plantsData.dateTime,
@@ -26,8 +29,9 @@ exports.create = function(plantsData, base64Image, username) {
                 username: user.username
             });
 
+            // Save the new plant entry
             return plant.save().then(plant => {
-                // console.log(plant);
+                // Return JSON stringified plant data
                 return JSON.stringify(plant);
             }).catch((err) => {
                 console.log(err);
@@ -39,7 +43,7 @@ exports.create = function(plantsData, base64Image, username) {
         });
 };
 
-// update plant name
+// Function to update plant name
 exports.updatePlantName = async function(plantID, newName) {
     try {
         const plant = await plantsModel.findById(plantID);
@@ -47,6 +51,7 @@ exports.updatePlantName = async function(plantID, newName) {
             throw new Error('Plant not found');
         }
 
+        // Update plant name
         plant.plantName = newName;
         await plant.save();
 
@@ -57,11 +62,10 @@ exports.updatePlantName = async function(plantID, newName) {
     }
 };
 
-
-
+// Function to get all plants with optional sorting and filtering by username
 exports.getAll = function(sort, username) {
-    // console.log('Sort value in controller:', sort);
     let sortOptions = {};
+    // Apply sorting based on sort parameter
     switch (sort) {
         case 'name-asc':
             sortOptions.plantName = 1;
@@ -73,7 +77,7 @@ exports.getAll = function(sort, username) {
             sortOptions.dateTime = 1;
             break;
         case 'location':
-            // When sorting by location, we'll find the user and use their location as the center point
+            // When sorting by location, find the user and use their location as the center point
             return User.findOne({ username: username })
                 .then(user => {
                     if (!user) throw new Error('User not found');
@@ -87,7 +91,6 @@ exports.getAll = function(sort, username) {
                             }
                         }
                     ]).then(plants => {
-                        // console.log(plants);
                         return plants;
                     }).catch(err => {
                         console.log(err);
@@ -96,11 +99,10 @@ exports.getAll = function(sort, username) {
                 })
                 .catch(err => {
                     console.error(err);
-                    // Handle error here, for example, render an error page
                 });
     }
+    // Return plants sorted according to sortOptions
     return plantsModel.find({}).sort(sortOptions).then(plants => {
-        // console.log(plants);
         return plants;
     }).catch(err => {
         console.log(err);
@@ -108,7 +110,7 @@ exports.getAll = function(sort, username) {
     });
 };
 
-
+// Function to get detailed information about a specific plant
 exports.getPlant = function(plantName) {
     // Capitalize first letter and make the rest lowercase for DBpedia query
     let dbpediaPlantName = plantName.split(' ')[0];
@@ -118,6 +120,7 @@ exports.getPlant = function(plantName) {
         let plantObject = plant.toObject();
         let dbpediaUrl = `http://dbpedia.org/sparql`;
 
+        // SPARQL queries to fetch additional plant information from DBpedia
         let sparqlQueryComment = `
         SELECT ?comment WHERE {
             <http://dbpedia.org/resource/${encodeURIComponent(dbpediaPlantName)}> rdfs:comment ?comment .
@@ -155,6 +158,7 @@ exports.getPlant = function(plantName) {
             }
         };
 
+        // Fetch plant comment from DBpedia
         return axios.get(dbpediaUrl, configComment)
             .then(response => {
                 let data = response.data;
@@ -165,6 +169,7 @@ exports.getPlant = function(plantName) {
                     plantObject.description = "DBpedia did not manage to get any information about this plant";
                 }
 
+                // Fetch plant taxon from DBpedia
                 return axios.get(dbpediaUrl, configTaxon)
                     .then(response => {
                         let data = response.data;
@@ -175,6 +180,7 @@ exports.getPlant = function(plantName) {
                             plantObject.taxon = "Taxon not found";
                         }
 
+                        // Fetch plant URI from DBpedia
                         return axios.get(dbpediaUrl, configUri)
                             .then(response => {
                                 let data = response.data;

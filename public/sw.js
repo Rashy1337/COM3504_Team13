@@ -1,5 +1,7 @@
+// Import the idb library for IndexedDB operations
 importScripts('https://unpkg.com/idb@5.0.4/build/iife/index-min.js');
 
+// Define constants for cache and IndexedDB names
 const CACHE_NAME = 'Plant App v1';
 const DB_NAME = 'PlantFindrDB';
 const PLANT_STORE_NAME = 'plants';
@@ -7,11 +9,13 @@ const CHAT_STORE_NAME = 'chats';
 const CHAT_SYNC_TAG = 'sync-chats';
 const PLANT_SYNC_TAG = 'sync-plants';
 
+// Event listener for service worker installation
 self.addEventListener('install', event => {
     console.log('Service Worker: Installing....');
     event.waitUntil((async () => {
         console.log('Service Worker: Caching App Shell at the moment......');
         try {
+            // Open cache and add app shell files to cache
             const cache = await caches.open(CACHE_NAME);
             cache.addAll([
                 '/',
@@ -29,9 +33,11 @@ self.addEventListener('install', event => {
     })());
 });
 
+// Event listener for service worker activation
 self.addEventListener('activate', event => {
     event.waitUntil(
         (async () => {
+            // Delete old caches except the current one
             const keys = await caches.keys();
             return Promise.all(
                 keys.map(async (cache) => {
@@ -45,34 +51,40 @@ self.addEventListener('activate', event => {
     );
 });
 
+// Event listener for fetch requests
 self.addEventListener('fetch', event => {
     event.respondWith(
         fetch(event.request)
             .then(response => {
                 if (response && response.status === 200) {
                     const responseClone = response.clone();
+                    // Cache the fetched response
                     caches.open(CACHE_NAME)
                         .then(cache => cache.put(event.request, responseClone));
                 }
                 return response;
             })
             .catch(() => {
+                // If fetch fails, serve from cache if available
                 return caches.match(event.request);
             })
     );
 });
 
+// Event listener for synchronization
 self.addEventListener('sync', event => {
     if (event.tag === PLANT_SYNC_TAG) {
-        event.waitUntil(syncPlants());
+        event.waitUntil(syncPlants()); // Sync plant data
     } else if (event.tag === CHAT_SYNC_TAG) {
-        event.waitUntil(syncChatMessages());
+        event.waitUntil(syncChatMessages()); // Sync chat messages
     }
 });
 
+// Open IndexedDB database
 async function openDB() {
     return idb.openDB(DB_NAME, 1, {
         upgrade(db) {
+            // Upgrade database schema if needed
             if (!db.objectStoreNames.contains(PLANT_STORE_NAME)) {
                 db.createObjectStore(PLANT_STORE_NAME, { keyPath: 'id', autoIncrement: true });
             }
@@ -83,24 +95,28 @@ async function openDB() {
     });
 }
 
+// Function to sync plants with the server
 async function syncPlants() {
     const db = await openDB();
     const tx = db.transaction(PLANT_STORE_NAME, 'readonly');
     const store = tx.objectStore(PLANT_STORE_NAME);
     const plants = await store.getAll();
 
+    // Send each plant to the server and delete from IndexedDB
     for (const plant of plants) {
         await sendPlantToServer(plant);
         await deleteSyncPlantFromIDB(plant.id);
     }
 }
 
+// Function to sync chat messages with the server
 async function syncChatMessages() {
     const db = await openDB();
     const tx = db.transaction(CHAT_STORE_NAME, 'readonly');
     const store = tx.objectStore(CHAT_STORE_NAME);
     const chats = await store.getAll();
 
+    // Send each chat message to the server and delete from IndexedDB
     for (const chat of chats) {
         try {
             console.log('Syncing chat:', chat);
@@ -113,6 +129,7 @@ async function syncChatMessages() {
     }
 }
 
+// Function to send plant data to the server
 async function sendPlantToServer(plant) {
     try {
         const response = await fetch('/upload', {
@@ -128,6 +145,7 @@ async function sendPlantToServer(plant) {
     }
 }
 
+// Function to send chat message to the server
 async function sendChatMessageToServer(chat) {
     try {
         const response = await fetch('/sync-chat', {
@@ -143,6 +161,7 @@ async function sendChatMessageToServer(chat) {
     }
 }
 
+// Function to delete synced plant data from IndexedDB
 async function deleteSyncPlantFromIDB(id) {
     const db = await openDB();
     const tx = db.transaction(PLANT_STORE_NAME, 'readwrite');
@@ -150,6 +169,7 @@ async function deleteSyncPlantFromIDB(id) {
     await tx.done;
 }
 
+// Function to delete synced chat message from IndexedDB
 async function deleteChatMessageFromIDB(id) {
     const db = await openDB();
     const tx = db.transaction(CHAT_STORE_NAME, 'readwrite');
@@ -157,21 +177,3 @@ async function deleteChatMessageFromIDB(id) {
     await tx.done;
 }
 
-// Handle notification click
-self.addEventListener('notificationclick', function(event) {
-    event.notification.close();
-
-    event.waitUntil(
-        clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clientList => {
-            for (let i = 0; i < clientList.length; i++) {
-                let client = clientList[i];
-                if (client.url === '/' && 'focus' in client) {
-                    return client.focus();
-                }
-            }
-            if (clients.openWindow) {
-                return clients.openWindow('/');
-            }
-        })
-    );
-});
