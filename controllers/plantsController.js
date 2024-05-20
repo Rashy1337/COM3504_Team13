@@ -2,8 +2,8 @@ const plantsModel = require('../models/plants');
 var User = require('../models/user');
 const axios = require('axios');
 
-exports.create = function(plantsData, filePath, username) {
-    User.findOne({ username: username })
+exports.create = function(plantsData, base64Image, username) {
+    return User.findOne({ username: username })
         .then(user => {
             if (!user) throw new Error('User not found');
 
@@ -14,12 +14,13 @@ exports.create = function(plantsData, filePath, username) {
                 plantCharacteristics: {
                     hasFlower: plantsData.hasFlower === 'Yes',
                     hasSeed: plantsData.hasSeed === 'Yes',
-                    isFruit: plantsData.isFruit === 'Yes',},
+                    isFruit: plantsData.isFruit === 'Yes'
+                },
                 plantIdentification: plantsData.plantIdentification,
                 sunExposure: plantsData.sunExposure,
                 colour: plantsData.colour,
                 descriptions: plantsData.descriptions,
-                plantPhoto: filePath, // Use filePath from arguments
+                plantPhoto: base64Image, // Save the Base64 image string
                 address: plantsData.address,
                 location: plantsData.location,
                 username: user.username
@@ -27,7 +28,6 @@ exports.create = function(plantsData, filePath, username) {
 
             return plant.save().then(plant => {
                 console.log(plant);
-
                 return JSON.stringify(plant);
             }).catch((err) => {
                 console.log(err);
@@ -36,9 +36,9 @@ exports.create = function(plantsData, filePath, username) {
         })
         .catch(err => {
             console.error(err);
-            // Handle error here, for example, render an error page
         });
 };
+
 
 exports.getAll = function(sort, username) {
     console.log('Sort value in controller:', sort);

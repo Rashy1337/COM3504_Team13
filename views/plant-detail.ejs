@@ -11,11 +11,10 @@
 <body>
   <%- include('partials/_header') %>
   <div class="details-container">
-
     <div class="details-map">
       <div class="image-details-container">
         <div class="image-name-container">
-          <img class="plant-photo" src="<%= plant.plantPhoto %>" alt="Plant Photo">
+          <img class="plant-photo" src="data:image/jpeg;base64,<%= plant.plantPhoto %>" alt="Plant Photo">
           <div class="plant-info">
             <h1 class="plant-name"><%= plant.plantName %></h1>
             <div class="plant-characteristics">
@@ -40,8 +39,6 @@
       </div>
       <div id="map" style="height: 30vh;"></div>
     </div>
-
-
     <!-- Chat container -->
     <div class="chat-container">
       <div class="chat-header">

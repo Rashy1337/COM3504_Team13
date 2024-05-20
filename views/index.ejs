@@ -40,7 +40,7 @@
           <h2><%= plant.plantName %></h2>
         </div>
         <% if (plant.plantPhoto) { %>
-          <img src="<%= plant.plantPhoto %>" width="200" height="200">
+          <img src="data:image/jpeg;base64,<%= plant.plantPhoto %>" width="200" height="200">
         <% } %>
       </a>
     <% }); %>

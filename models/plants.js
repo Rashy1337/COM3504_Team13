@@ -3,7 +3,6 @@ let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 
 let plantSchema = new Schema({
-
     plantName: {
         type: String,
         required: true
@@ -32,7 +31,7 @@ let plantSchema = new Schema({
         type: String,
     },
     plantPhoto: {
-        type: String,
+        type: String, // Change from file path to Base64 string
     },
     address: {
         type: String,
@@ -51,9 +50,7 @@ let plantSchema = new Schema({
     username: {
         type: String,
         required: true
-
     }
-
 });
 
 // Add the 2dsphere index to the location field

@@ -3,21 +3,11 @@ const router = express.Router();
 const multer = require('multer');
 const plants = require('../controllers/plantsController');
 const Chat = require('../models/chat');
+const axios = require('axios');
 const Plants = require('../models/plants');
 const User = require('../models/user');
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'public/images/uploads/');
-    },
-    filename: function (req, file, cb) {
-        const original = file.originalname;
-        const file_extension = original.split(".");
-        const filename = Date.now() + '.' + file_extension[file_extension.length - 1];
-        cb(null, filename);
-    }
-});
-
+const storage = multer.memoryStorage();
 let upload = multer({ storage: storage });
 
 /* GET home page. */
@@ -89,24 +79,32 @@ router.get('/upload', function(req, res, next) {
 });
 
 router.post('/upload', upload.single('plantPhoto'), async function(req, res, next) {
-    console.log(req.body); // Log the body of the request
-    console.log(req.file); // Log the file object if uploaded
+    // console.log(req.body); // Log the body of the request
+    // console.log(req.file); // Log the file object if uploaded
+
     let plantsData = req.body;
-    let filePath;
+    let fileBuffer;
 
     if (req.file) {
-        filePath = req.file.path.replace('public', ''); // Convert local file path to URL path if file is uploaded
+        fileBuffer = req.file.buffer; // Get file buffer if file is uploaded
     } else if (req.body.photoUrl) {
-        filePath = req.body.photoUrl; // Use the URL provided in the form if no file is uploaded
+        try {
+            const response = await axios.get(req.body.photoUrl, { responseType: 'arraybuffer' });
+            fileBuffer = Buffer.from(response.data, 'binary');
+        } catch (error) {
+            console.error('Error downloading image from URL:', error);
+            return res.status(400).send('Invalid image URL');
+        }
     } else {
-        // Handle case where neither a file is uploaded nor a URL is provided
         return res.status(400).send('No image provided');
     }
-    plantsData.plantPhoto = filePath;
+
+    const base64Image = fileBuffer.toString('base64');
+    plantsData.plantPhoto = base64Image;
 
     let locationData;
     try {
-        locationData = JSON.parse(req.body.location); // Parse location data
+        locationData = JSON.parse(req.body.location);
     } catch (err) {
         console.error('Error parsing location data:', err);
         locationData = null;
@@ -115,17 +113,17 @@ router.post('/upload', upload.single('plantPhoto'), async function(req, res, nex
     if (locationData) {
         plantsData.location = {
             type: 'Point',
-            coordinates: [locationData.lng, locationData.lat] // Use lng and lat values to create coordinates array
+            coordinates: [locationData.lng, locationData.lat]
         };
     } else {
         plantsData.location = {
             type: 'Point',
-            coordinates: [0, 0] // Default coordinates in case of missing location data
+            coordinates: [0, 0]
         };
     }
 
     try {
-        let results = await plants.create(plantsData, filePath, req.body.username); // Wait for the promise to resolve
+        let results = await plants.create(plantsData, base64Image, req.body.username);
         console.log(results);
         res.redirect('/');
     } catch (error) {
